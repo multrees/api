@@ -160,12 +160,12 @@ resourceTypes:
         body:
           application/json:
             type: Clients
-  post:
-    description: Create a number of clients.
-  put:
-    description: Update a number of clients.
-  delete:
-    description: Remove a number of clients.
+#  post:
+#    description: Create a number of clients.
+#  put:
+#    description: Update a number of clients.
+#  delete:
+#    description: Remove a number of clients.
   /{client}:
     displayName: Client
     description: A client ... [TODO]
@@ -176,12 +176,12 @@ resourceTypes:
           body:
             application/json:
               type: Client
-    post:
-      description: Create a client.
-    put:
-      description: Update a client.
-    delete:
-      description: Remove a client.
+#    post:
+#      description: Create a client.
+#    put:
+#      description: Update a client.
+#    delete:
+#      description: Remove a client.
 /accounts:
   displayName: Accounts
   description: Collection of all accounts ... [TODO]
@@ -192,12 +192,12 @@ resourceTypes:
         body:
           application/json:
             type: Accounts
-  post:
-    description: Create a number of accounts.
-  put:
-    description: Update a number of accounts.
-  delete:
-    description: Remove a number of accounts.
+#  post:
+#    description: Create a number of accounts.
+#  put:
+#    description: Update a number of accounts.
+#  delete:
+#    description: Remove a number of accounts.
   /{account}:
     displayName: Account
     description: An account ... [TODO]
@@ -208,12 +208,12 @@ resourceTypes:
           body:
             application/json:
               type: Account
-    post:
-      description: Create an account.
-    put:
-      description: Update an account.
-    delete:
-      description: Remove an account.
+#    post:
+#      description: Create an account.
+#    put:
+#      description: Update an account.
+#    delete:
+#      description: Remove an account.
 /beneficiaries:
   displayName: Beneficiaries
   description: Collection of all beneficiaries ... [TODO]
@@ -224,12 +224,12 @@ resourceTypes:
         body:
           application/json:
             type: Beneficiaries
-  post:
-    description: Create a number of beneficiaries.
-  put:
-    description: Update a number of beneficiaries.
-  delete:
-    description: Remove a number of beneficiaries.
+#  post:
+#    description: Create a number of beneficiaries.
+#  put:
+#    description: Update a number of beneficiaries.
+#  delete:
+#    description: Remove a number of beneficiaries.
   /{beneficiary}:
     displayName: Beneficiary
     description: A beneficiary ... [TODO]
@@ -240,12 +240,12 @@ resourceTypes:
           body:
             application/json:
               type: Beneficiary
-    post:
-      description: Create a beneficiary.
-    put:
-      description: Update a beneficiary.
-    delete:
-      description: Remove a beneficiary.
+#    post:
+#      description: Create a beneficiary.
+#    put:
+#      description: Update a beneficiary.
+#    delete:
+#      description: Remove a beneficiary.
 /holdings:
   displayName: Holdings
   description: Collection of all holdings.
@@ -271,12 +271,12 @@ resourceTypes:
           body:
             application/json:
               type: Holding
-    post:
-      body:
-        application/json:
-          schema: Holding
-      responses:
-        200:
+#    post:
+#      body:
+#        application/json:
+#          schema: Holding
+#      responses:
+#        200:
     /classifications/{classification}:
       get:
         responses:
@@ -302,12 +302,12 @@ resourceTypes:
         body:
           application/json:
             type: Payments
-  post:
-    description: Create a number of payments.
-  put:
-    description: Update a number of payments.
-  delete:
-    description: Remove a number of payments.
+#  post:
+#    description: Create a number of payments.
+#  put:
+#    description: Update a number of payments.
+#  delete:
+#    description: Remove a number of payments.
   /{payment}:
     description: A single payment ... [TODO]
     get:
@@ -317,12 +317,12 @@ resourceTypes:
           body:
             application/json:
               type: Payment
-    post:
-      description: Create a payment.
-    put:
-      description: Update a payment.
-    delete:
-      description: Remove a payment.
+#    post:
+#      description: Create a payment.
+#    put:
+#      description: Update a payment.
+#    delete:
+#      description: Remove a payment.
 /trades:
   displayName: Trades
   description: Collection of all trades.
@@ -334,12 +334,12 @@ resourceTypes:
         body:
           application/json:
             type: Trades
-  post:
-    description: Create a number of trades.
-  put:
-    description: Update a number of trades.
-  delete:
-    description: Remove a number of trades.
+#  post:
+#    description: Create a number of trades.
+#  put:
+#    description: Update a number of trades.
+#  delete:
+#    description: Remove a number of trades.
   /{trade}:
     displayName: Trade
     description: A trade ... [TODO]
@@ -350,31 +350,31 @@ resourceTypes:
           body:
             application/json:
               type: Trade
-    post:
-      description: Create a trade.
-    put:
-      description: Update a trade.
-    delete:
-      description: Remove a trade.
+#    post:
+#      description: Create a trade.
+#    put:
+#      description: Update a trade.
+#    delete:
+#      description: Remove a trade.
 /users:
   displayName: Users
   description: Collection of all users.
   get:
     description: Retrieve all users.
-  post:
-    description: Create a number of users.
-  put:
-    description: Update a number of users.
-  delete:
-    description: Remove a number of users.
+#  post:
+#    description: Create a number of users.
+#  put:
+#    description: Update a number of users.
+#  delete:
+#    description: Remove a number of users.
   /{user}:
     displayName: User
     description: A user ... [TODO]
     get:
       description: Retieve a user.
-    post:
-      description: Create a user.
-    put:
-      description: Update a user.
-    delete:
-      description: Remove a user.
+#    post:
+#      description: Create a user.
+#    put:
+#      description: Update a user.
+#    delete:
+#      description: Remove a user.
