@@ -37,3 +37,21 @@ To produce Markdown from the RAML which could be used with the GitHub README:
     npm i -g raml2html-markdown-theme
 
     raml2html --theme raml2html-markdown-theme api.raml > api.md
+
+## Publish to GitHub Project page
+
+To publish the resulting HTML do, for example, the following:
+
+    git add -u
+    git commit -m "Updated API HTML"
+    git checkout gh-pages
+    git cherry-pick --no-commit <commit>
+    git add index.html
+    git commit -m "Updated API HTML"
+    git push
+
+Basically you are taking the latest, generated, HTML from the `master` branch's
+last commit (copy the SHA1 for the `git cherry-pick` command)
+over to the `gh-pages` branch. Once pushed to GitHub this will be displayed as the
+GitHub Project page. The `cherry-pick` knows that the `api.html` in `master` is
+the `index.html` in `gh-pages` because of an earlier rename in a previous commit.
