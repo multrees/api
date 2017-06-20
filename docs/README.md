@@ -1,5 +1,11 @@
 # Multrees.WebAPI Documentation
 
+## Contents
+
+- [Introduction](#introduction)
+- [RAML Tooling](#raml-tooling)
+- [Publish to GitHub Project page](#publish-to-github-project-page)
+
 ## Introduction
 
 The documentation for the Multrees WebAPI is available from here.
@@ -14,15 +20,13 @@ from the RAML including client SDKs; documentation for client developers and
 even test harnesses.
 
 Editing the RAML can be done in any editor as it is human-readable YAML but it's
-easier with a specialized editor like [Atom](https://atom.io/) with the
-[API Workbench](https://atom.io/packages/api-workbench) plugin.
+easier with a specialized editor like [Atom][] with the
+[API Workbench][api workbench plugin] plugin.
 
-There's also [Restlet Studio](https://restlet.com/modules/studio/) or
-[APIMATIC Transfomer](https://apimatic.io/transformer) or
-[API Workbench](http://apiworkbench.com/).
+There's also [Restlet Studio][] or [APIMATIC Transfomer][] or [API Workbench][].
 
 Producing API documentation can be done easily (even within the build process)
-with tooling like [raml2html](https://github.com/raml2html/raml2html).
+with tooling like [raml2html][].
 
 Install `raml2html`:
 
@@ -32,11 +36,18 @@ Generate HTML markup for the API:
 
     raml2html api.raml > api.html
 
-To produce Markdown from the RAML which could be used with the GitHub README:
+To produce Markdown from the RAML which is used with the GitHub README:
 
     npm i -g raml2html-markdown-theme
 
-    raml2html --theme raml2html-markdown-theme api.raml > api.md
+    raml2html --theme raml2html-markdown-theme api.raml > README.md
+
+[atom]: https://atom.io/ "Atom"
+[api workbench plugin]: https://atom.io/packages/api-workbench "API Workbench plugin"
+[restlet studio]: https://restlet.com/modules/studio/ "Restlet Studio"
+[apimatic transfomer]: https://apimatic.io/transformer "APIMATIC Transfomer"
+[api workbench]: http://apiworkbench.com/ "API Workbench"
+[raml2html]: https://github.com/raml2html/raml2html "raml2html"
 
 ## Publish to GitHub Project page
 
@@ -55,3 +66,6 @@ last commit (copy the SHA1 for the `git cherry-pick` command)
 over to the `gh-pages` branch. Once pushed to GitHub this will be displayed as the
 GitHub Project page. The `cherry-pick` knows that the `api.html` in `master` is
 the `index.html` in `gh-pages` because of an earlier rename in a previous commit.
+
+Remember to also update the README.md by running `raml2html` with the markdown
+theme, as above ([RAML Tooling](#raml-tooling)).
