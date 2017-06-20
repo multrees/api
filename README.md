@@ -1,39 +1,134 @@
-# Multrees.WebAPI Documentation
+# Multrees WebAPI API documentation version 1
+https://api.multrees.com/v{version}/{fi}
 
-## Introduction
+---
 
-The documentation for the Multrees WebAPI is available from here.
-Code samples and auto-generated client libraries in multiple programming
-languages are also provided.
+## Clients
+Collection of all clients ... [TODO]
 
-## RAML Tooling
+### /clients
 
-The API is described using RAML (RESTful API Modeling Language). This lends
-itself to the creation of a design-first API. Other artifacts can be generated
-from the RAML including client SDKs; documentation for client developers and
-even test harnesses.
+* **get**: Retrieve all clients.
+* **post**: Create a number of clients.
+* **put**: Update a number of clients.
+* **delete**: Remove a number of clients.
 
-Editing the RAML can be done in any editor as it is human-readable YAML but it's
-easier with a specialized editor like [Atom](https://atom.io/) with the
-[API Workbench](https://atom.io/packages/api-workbench) plugin.
+### /clients/{client}
+A client ... [TODO]
 
-There's also [Restlet Studio](https://restlet.com/modules/studio/) or
-[APIMATIC Transfomer](https://apimatic.io/transformer) or
-[API Workbench](http://apiworkbench.com/).
+* **get**: Retrieve a client.
+* **post**: Create a client.
+* **put**: Update a client.
+* **delete**: Remove a client.
 
-Producing API documentation can be done easily (even within the build process)
-with tooling like [raml2html](https://github.com/raml2html/raml2html).
+## Accounts
+Collection of all accounts ... [TODO]
 
-Install `raml2html`:
+### /accounts
 
-    npm i -g raml2html
+* **get**: Retrieve all accounts.
+* **post**: Create a number of accounts.
+* **put**: Update a number of accounts.
+* **delete**: Remove a number of accounts.
 
-Generate HTML markup for the API:
+### /accounts/{account}
+An account ... [TODO]
 
-    raml2html api.raml > api.html
+* **get**: Retrieve an account.
+* **post**: Create an account.
+* **put**: Update an account.
+* **delete**: Remove an account.
 
-To produce Markdown from the RAML which could be used with the GitHub README:
+## Beneficiaries
+Collection of all beneficiaries ... [TODO]
 
-    npm i -g raml2html-markdown-theme
+### /beneficiaries
 
-    raml2html --theme raml2html-markdown-theme api.raml > api.md
+* **get**: Retrieve all beneficiaries.
+* **post**: Create a number of beneficiaries.
+* **put**: Update a number of beneficiaries.
+* **delete**: Remove a number of beneficiaries.
+
+### /beneficiaries/{beneficiary}
+A beneficiary ... [TODO]
+
+* **get**: Retrieve a beneficiary.
+* **post**: Create a beneficiary.
+* **put**: Update a beneficiary.
+* **delete**: Remove a beneficiary.
+
+## Holdings
+Collection of all holdings.
+
+### /holdings
+
+* **get**: Retrieve all holdings.
+
+### /holdings/{holding}
+A holding ... [TODO]
+
+* **get**: 
+* **post**: 
+
+### /holdings/{holding}/classifications/{classification}
+
+* **get**: 
+
+### /holdings/{holding}/accounts/{account}
+
+* **get**: 
+
+## Payments
+Collection of all payments.
+
+### /payments
+
+* **get**: Retrieve all payments.
+* **post**: Create a number of payments.
+* **put**: Update a number of payments.
+* **delete**: Remove a number of payments.
+
+### /payments/{payment}
+A single payment ... [TODO]
+
+* **get**: Retrieve a payment.
+* **post**: Create a payment.
+* **put**: Update a payment.
+* **delete**: Remove a payment.
+
+## Trades
+Collection of all trades.
+
+### /trades
+
+* **get**: Retrieve all trades.
+* **post**: Create a number of trades.
+* **put**: Update a number of trades.
+* **delete**: Remove a number of trades.
+
+### /trades/{trade}
+A trade ... [TODO]
+
+* **get**: Retrieve a single trade.
+* **post**: Create a trade.
+* **put**: Update a trade.
+* **delete**: Remove a trade.
+
+## Users
+Collection of all users.
+
+### /users
+
+* **get**: Retrieve all users.
+* **post**: Create a number of users.
+* **put**: Update a number of users.
+* **delete**: Remove a number of users.
+
+### /users/{user}
+A user ... [TODO]
+
+* **get**: Retieve a user.
+* **post**: Create a user.
+* **put**: Update a user.
+* **delete**: Remove a user.
+
