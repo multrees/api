@@ -69,3 +69,17 @@ the `index.html` in `gh-pages` because of an earlier rename in a previous commit
 
 Remember to also update the README.md by running `raml2html` with the markdown
 theme, as above ([RAML Tooling](#raml-tooling)).
+
+## Generate Clients
+
+Use [OAS RAML Converter](https://github.com/mulesoft/oas-raml-converter) to translate to Swagger format:
+
+    oas-raml-converter --from RAML10 --to OAS api.raml > api-oas.json
+
+[AutoRest](https://github.com/Azure/autorest/blob/master/docs/user/cli.md) doesn't work with this translated file but it's possible it might later:
+
+    autorest --input-file=api-oas.json --csharp --output-folder=generated\csharp --namespace=Multrees.WebAPI
+
+[Swagger.io](https://github.com/swagger-api/swagger-codegen#docker) can generate code, for example, this creates a Go client:
+
+    docker run --rm -v ${PWD}:/local swaggerapi/swagger-codegen-cli generate -i https://raw.githubusercontent.com/multrees/api/master/api-oas.json -l go -o /local/generated/go
