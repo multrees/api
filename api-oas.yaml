@@ -1,0 +1,513 @@
+{
+ "swagger": "2.0",
+ "info": {
+  "api-version": "1",
+  "title": "Multrees WebAPI",
+  "description": "Disruption\nOpen\nBreakthrough\nGamechanger\nInnovative\nMillennial\nLeverage\nNext Generation\nPlatform\nLegacy\nDigital\nDemocratisation\nAnything as-a-service\nMarketplace\n"
+ },
+ "host": "api.multrees.com",
+ "schemes": [
+  "https"
+ ],
+ "consumes": [
+  "application/json"
+ ],
+ "produces": [
+  "application/json"
+ ],
+ "paths": {
+  "/clients": {
+   "get": {
+    "description": "Retrieve all clients.",
+    "responses": {
+     "200": {
+      "description": "",
+      "schema": {
+       "$ref": "#/definitions/Clients"
+      }
+     }
+    }
+   }
+  },
+  "/clients/{client}": {
+   "parameters": [
+    {
+     "name": "client",
+     "in": "path",
+     "required": true,
+     "type": "string"
+    }
+   ],
+   "get": {
+    "description": "Retrieve a client.",
+    "responses": {
+     "200": {
+      "description": "",
+      "schema": {
+       "$ref": "#/definitions/Client"
+      }
+     }
+    }
+   }
+  },
+  "/accounts": {
+   "get": {
+    "description": "Retrieve all accounts.",
+    "responses": {
+     "200": {
+      "description": "",
+      "schema": {
+       "$ref": "#/definitions/Accounts"
+      }
+     }
+    }
+   }
+  },
+  "/accounts/{account}": {
+   "parameters": [
+    {
+     "name": "account",
+     "in": "path",
+     "required": true,
+     "type": "string"
+    }
+   ],
+   "get": {
+    "description": "Retrieve an account.",
+    "responses": {
+     "200": {
+      "description": "",
+      "schema": {
+       "$ref": "#/definitions/Account"
+      }
+     }
+    }
+   }
+  },
+  "/beneficiaries": {
+   "get": {
+    "description": "Retrieve all beneficiaries.",
+    "responses": {
+     "200": {
+      "description": "",
+      "schema": {
+       "$ref": "#/definitions/Beneficiaries"
+      }
+     }
+    }
+   }
+  },
+  "/beneficiaries/{beneficiary}": {
+   "parameters": [
+    {
+     "name": "beneficiary",
+     "in": "path",
+     "required": true,
+     "type": "string"
+    }
+   ],
+   "get": {
+    "description": "Retrieve a beneficiary.",
+    "responses": {
+     "200": {
+      "description": "",
+      "schema": {
+       "$ref": "#/definitions/Beneficiary"
+      }
+     }
+    }
+   }
+  },
+  "/holdings": {
+   "get": {
+    "description": "Retrieve all holdings.",
+    "parameters": [
+     {
+      "name": "extractDate",
+      "in": "query",
+      "description": "TODO",
+      "required": false,
+      "type": "string",
+      "format": "date-time"
+     }
+    ],
+    "responses": {
+     "200": {
+      "description": "",
+      "schema": {
+       "$ref": "#/definitions/Holdings"
+      }
+     }
+    }
+   }
+  },
+  "/holdings/{holding}": {
+   "parameters": [
+    {
+     "name": "holding",
+     "in": "path",
+     "required": true,
+     "type": "string"
+    }
+   ],
+   "get": {
+    "responses": {
+     "200": {
+      "description": "",
+      "schema": {
+       "$ref": "#/definitions/Holding"
+      }
+     }
+    }
+   }
+  },
+  "/holdings/{holding}/classifications/{classification}": {
+   "parameters": [
+    {
+     "name": "holding",
+     "in": "path",
+     "required": true,
+     "type": "string"
+    },
+    {
+     "name": "classification",
+     "in": "path",
+     "required": true,
+     "type": "string"
+    }
+   ],
+   "get": {
+    "responses": {
+     "200": {
+      "description": "",
+      "schema": {
+       "$ref": "#/definitions/Holdings"
+      }
+     }
+    }
+   }
+  },
+  "/holdings/{holding}/accounts/{account}": {
+   "parameters": [
+    {
+     "name": "holding",
+     "in": "path",
+     "required": true,
+     "type": "string"
+    },
+    {
+     "name": "account",
+     "in": "path",
+     "required": true,
+     "type": "string"
+    }
+   ],
+   "get": {
+    "responses": {
+     "200": {
+      "description": "",
+      "schema": {
+       "$ref": "#/definitions/Holdings"
+      }
+     }
+    }
+   }
+  },
+  "/payments": {
+   "get": {
+    "description": "Retrieve all payments.",
+    "responses": {
+     "200": {
+      "description": "",
+      "schema": {
+       "$ref": "#/definitions/Payments"
+      }
+     }
+    }
+   }
+  },
+  "/payments/{payment}": {
+   "parameters": [
+    {
+     "name": "payment",
+     "in": "path",
+     "required": true,
+     "type": "string"
+    }
+   ],
+   "get": {
+    "description": "Retrieve a payment.",
+    "responses": {
+     "200": {
+      "description": "",
+      "schema": {
+       "$ref": "#/definitions/Payment"
+      }
+     }
+    }
+   }
+  },
+  "/trades": {
+   "get": {
+    "description": "Retrieve all trades.",
+    "responses": {
+     "200": {
+      "description": "",
+      "schema": {
+       "$ref": "#/definitions/Trades"
+      }
+     }
+    }
+   }
+  },
+  "/trades/{trade}": {
+   "parameters": [
+    {
+     "name": "trade",
+     "in": "path",
+     "required": true,
+     "type": "string"
+    }
+   ],
+   "get": {
+    "description": "Retrieve a single trade.",
+    "responses": {
+     "200": {
+      "description": "",
+      "schema": {
+       "$ref": "#/definitions/Trade"
+      }
+     }
+    }
+   }
+  },
+  "/users": {
+   "get": {
+    "description": "Retrieve all users.",
+    "responses": {
+     "default": {
+      "description": "",
+      "schema": {}
+     }
+    }
+   }
+  },
+  "/users/{user}": {
+   "parameters": [
+    {
+     "name": "user",
+     "in": "path",
+     "required": true,
+     "type": "string"
+    }
+   ],
+   "get": {
+    "description": "Retieve a user.",
+    "responses": {
+     "default": {
+      "description": "",
+      "schema": {}
+     }
+    }
+   }
+  }
+ },
+ "x-basePath": "/v{version}/{fi}",
+ "definitions": {
+  "Account": {
+   "type": "object",
+   "example": {
+    "customerId": "TODO",
+    "accountName": "TODO"
+   },
+   "description": "An account.",
+   "properties": {
+    "customerId": {
+     "type": "string"
+    },
+    "accountName": {
+     "type": "string"
+    }
+   },
+   "required": [
+    "customerId",
+    "accountName"
+   ]
+  },
+  "Accounts": {
+   "type": "array",
+   "description": "An array of accounts.",
+   "minItems": 1,
+   "items": {
+    "$ref": "#/definitions/Account"
+   }
+  },
+  "Beneficiary": {
+   "example": {
+    "customerId": "TODO",
+    "date": "2017-01-20",
+    "accountName": "TODO",
+    "internal": true,
+    "relationship": ""
+   },
+   "description": "A beneficiary.",
+   "properties": {
+    "customerId": {
+     "type": "string"
+    },
+    "accountName": {
+     "type": "string"
+    },
+    "date": {
+     "type": "string",
+     "format": "date"
+    },
+    "internal": {
+     "type": "boolean"
+    },
+    "relationship": {
+     "type": "string"
+    }
+   },
+   "type": "object",
+   "required": [
+    "customerId",
+    "accountName",
+    "date",
+    "internal",
+    "relationship"
+   ]
+  },
+  "Beneficiaries": {
+   "type": "array",
+   "description": "An array of beneficiaries.",
+   "minItems": 1,
+   "items": {
+    "$ref": "#/definitions/Beneficiary"
+   }
+  },
+  "Client": {
+   "example": {
+    "customerId": "TODO",
+    "accountName": "TODO"
+   },
+   "description": "A client.",
+   "properties": {
+    "customerId": {
+     "type": "string"
+    },
+    "accountName": {
+     "type": "string"
+    }
+   },
+   "type": "object",
+   "required": [
+    "customerId",
+    "accountName"
+   ]
+  },
+  "Clients": {
+   "type": "array",
+   "description": "An array of clients.",
+   "minItems": 1,
+   "items": {
+    "$ref": "#/definitions/Client"
+   }
+  },
+  "Holding": {
+   "example": {
+    "customerId": "TODO",
+    "accountName": "TODO"
+   },
+   "description": "A holding ... [TODO]",
+   "properties": {
+    "customerId": {
+     "type": "string"
+    },
+    "accountName": {
+     "type": "string"
+    }
+   },
+   "type": "object",
+   "required": [
+    "customerId",
+    "accountName"
+   ]
+  },
+  "Holdings": {
+   "type": "array",
+   "description": "An array of holdings.",
+   "minItems": 1,
+   "items": {
+    "$ref": "#/definitions/Holding"
+   }
+  },
+  "Payment": {
+   "example": {
+    "customerId": "TODO",
+    "accountName": "TODO",
+    "repeat": "first day of month",
+    "notice": "2017-02-28"
+   },
+   "description": "A payment ... [TODO]",
+   "properties": {
+    "customerId": {
+     "type": "string"
+    },
+    "accountName": {
+     "type": "string"
+    },
+    "notice": {
+     "type": "string",
+     "description": "If this is an advanced notice then this is the settlement date.\nOtherwise it is the date of the payment.\n",
+     "format": "date"
+    },
+    "repeat": {
+     "type": "string",
+     "description": "If this is a regular payment then describe the repeat."
+    }
+   },
+   "type": "object",
+   "required": [
+    "customerId",
+    "accountName"
+   ]
+  },
+  "Payments": {
+   "type": "array",
+   "description": "An array of payments.",
+   "minItems": 1,
+   "items": {
+    "$ref": "#/definitions/Payment"
+   }
+  },
+  "Trade": {
+   "example": {
+    "customerId": "TODO",
+    "accountName": "TODO"
+   },
+   "description": "A trade.",
+   "properties": {
+    "customerId": {
+     "type": "string"
+    },
+    "accountName": {
+     "type": "string"
+    }
+   },
+   "type": "object",
+   "required": [
+    "customerId",
+    "accountName"
+   ]
+  },
+  "Trades": {
+   "type": "array",
+   "description": "An array of trades.",
+   "minItems": 1,
+   "items": {
+    "$ref": "#/definitions/Trade"
+   }
+  }
+ }
+}
