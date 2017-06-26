@@ -10,21 +10,7 @@ baseUriParameters:
 protocols: [ HTTPS ]
 mediaType:
   - application/json
-description: |
-  Disruption
-  Open
-  Breakthrough
-  Gamechanger
-  Innovative
-  Millennial
-  Leverage
-  Next Generation
-  Platform
-  Legacy
-  Digital
-  Democratisation
-  Anything … as-a-service
-  Marketplace
+description: Multrees Web API provides secure, programmatic access into the core elements of Multrees' services and data.  Version 1 focusses on exposing out 'GET' functionality for integration into Digital and Reporing Tools.  Version 2 will focus more on POST/PUT for integration into CRM and platform technologies.
 types:
   Account:
     displayName: Account
@@ -38,8 +24,8 @@ types:
         type: string
         required: true
     example:
-      customerId : "TODO"
-      accountName : "TODO"
+      customerId : 123456
+      accountName : "John Smith ISA"
   Accounts:
     description: An array of accounts.
     type: Account[]
@@ -200,7 +186,7 @@ resourceTypes:
 #    description: Remove a number of accounts.
   /{account}:
     displayName: Account
-    description: List of investment or cash accounts
+    description: Investment or cash accounts
     get:
       description: Retrieve an account.
       queryParameters:
