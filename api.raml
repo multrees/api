@@ -200,9 +200,28 @@ resourceTypes:
 #    description: Remove a number of accounts.
   /{account}:
     displayName: Account
-    description: An investment or cash account
+    description: List of investment or cash accounts
     get:
       description: Retrieve an account.
+      queryParameters:
+        Group:
+          displayName: Level
+          type: string
+          description: GROUP or CUST
+          example: CASH
+          required: false
+        AccountType:
+          displayName: Account Type
+          type: string
+          description:CASH or INV
+          example: CASH
+          required: false
+        SearchTerm:
+          displayName: Search Term
+          type: string
+          description: Search on Account Name
+          example: Smith
+          required: false
       responses:
         200:
           body:
