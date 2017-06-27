@@ -48,9 +48,9 @@ types:
       relationship:
         type: string
     example:
-      customerId : "TODO"
+      customerId : "ABC1234"
       date: "2017-01-20"
-      accountName : "TODO"
+      accountName : "Account Number 1"
       internal: true
       relationship: ""
   Beneficiaries:
@@ -66,15 +66,114 @@ types:
       accountName:
         type: string
         required: true
+      customerType :
+        type: string
+        required: true
+      baseCurrency :
+        type: string
+        required: true
+      taxResidency :
+        type: string
+        required: true
+      taxResidency :
+        type: string
+        required: true
+      EffectiveDate :
+        type: date-only
+        required: true
+      taxDomicile :
+        type: string
+        required: true
+      taxYearEnd :
+        type: string
+        required: true
+      taxStatus :
+        type: string
+        required: true
+      accountingMethod :
+        type: string
+        required: true
+      preferredLanguage :
+        type: string
+        required: true
+      title :
+        type: string
+        required: true
+      firstname :
+        type: string
+        required: true
+      lastName :
+        type: string
+        required: true
+      gender :
+        type: string
+        required: true
+      dateOfBirth :
+        type: date-only
+        required: true
+      maritalStatus :
+        type: string
+        required: true
+      birthCountry :
+        type: string
+        required: true
+      addressType :
+        type: string
+        required: true
+      address1 :
+        type: string
+        required: true
+      address2 :
+        type: string
+        required: true
+      address3 :
+        type: string
+        required: true
+      city :
+        type: string
+        required: true
+      postalCode :
+        type: string
+        required: true
+      birthCountry :
+        type: string
+        required: true
+      email :
+        type: string
+        required: true
     example:
-      customerId : "TODO"
-      accountName : "TODO"
+      customerId : ABC1234
+      accountName : Brian Smith ISA Account
+      customerType : Individual
+      baseCurrency : GBP
+      taxResidency : UK
+      taxResidencyEffectiveDate : 10/10/2004
+      taxDomicile : UK
+      taxYearEnd : 01/04
+      taxStatus : Normal
+      accountingMethod : FIFO
+      preferredLanguage : English
+      title : Mr
+      firstname : Brian
+      lastName : Smith
+      gender : Male
+      dateOfBirth : 01/05/1974
+      maritalStatus : Married
+      birthCountry : UK
+      addressType : Home
+      address1 : 10 Downing Street
+      address2 :
+      address3 :
+      city : London
+      postalCode : AB13 8UK
+      birthCountry : UK
+      email : Brian.Smith@wealth.com
   Clients:
     description: An array of clients.
     type: Client[]
     minItems: 1
   Holding:
-    description: A holding ... [TODO]
+    description: A individual account holding
     properties:
       customerId:
         type: string
@@ -83,14 +182,14 @@ types:
         type: string
         required: true
     example:
-      customerId : "TODO"
-      accountName : "TODO"
+      customerId : "ABC1234"
+      accountName : "Brian Smith ISA Account"
   Holdings:
     description: An array of holdings.
     type: Holding[]
     minItems: 1
   Payment:
-    description: A payment ... [TODO]
+    description: A individual payment
     properties:
       customerId:
         type: string
@@ -111,8 +210,8 @@ types:
         displayName: Regular Payment
         description: If this is a regular payment then describe the repeat.
     example:
-      customerId : "TODO"
-      accountName : "TODO"
+      customerId : "ABC1234"
+      accountName : "Brian Smith ISA Account"
       repeat: "first day of month"
       notice: "2017-02-28"
   Payments:
@@ -129,8 +228,8 @@ types:
         type: string
         required: true
     example:
-      customerId : "TODO"
-      accountName : "TODO"
+      customerId : "ABC1234"
+      accountName : "Brian Smith ISA Account"
   Trades:
     description: An array of trades.
     type: Trade[]
@@ -141,6 +240,13 @@ resourceTypes:
   description: Collection of all clients ... [TODO]
   get:
     description: Retrieve all clients.
+      queryParameters:
+        SearchTerm:
+          displayName: Search Term
+          type: string
+          description: Search on Account Name
+          example: Smith
+          required: false
     responses:
       200:
         body:
@@ -154,9 +260,12 @@ resourceTypes:
 #    description: Remove a number of clients.
   /{client}:
     displayName: Client
-    description: A client ... [TODO]
+    description: An individual or organisation investor
     get:
-      description: Retrieve a client.
+      description: Retrieve client details.
+      queryParameters:
+        SearchTerm:
+          clientId: Unique client reference
       responses:
         200:
           body:
@@ -170,9 +279,27 @@ resourceTypes:
 #      description: Remove a client.
 /accounts:
   displayName: Accounts
-  description: Collection of all accounts ... [TODO]
+  description: Collection of all investment and cash accounts
   get:
-    description: Retrieve all accounts.
+    description: Retrieve all cash and investment accounts.
+      Group:
+        displayName: Level
+        type: string
+        description: GROUP or CUST
+        example: CASH
+        required: false
+      AccountType:
+        displayName: Account Type
+        type: string
+        description:CASH or INV
+        example: CASH
+        required: false
+      SearchTerm:
+        displayName: Search Term
+        type: string
+        description: Search on Account Name
+        example: Smith
+        required: false    
     responses:
       200:
         body:
@@ -190,24 +317,6 @@ resourceTypes:
     get:
       description: Retrieve an account.
       queryParameters:
-        Group:
-          displayName: Level
-          type: string
-          description: GROUP or CUST
-          example: CASH
-          required: false
-        AccountType:
-          displayName: Account Type
-          type: string
-          description:CASH or INV
-          example: CASH
-          required: false
-        SearchTerm:
-          displayName: Search Term
-          type: string
-          description: Search on Account Name
-          example: Smith
-          required: false
       responses:
         200:
           body:
@@ -221,9 +330,16 @@ resourceTypes:
 #      description: Remove an account.
 /beneficiaries:
   displayName: Beneficiaries
-  description: Collection of all beneficiaries ... [TODO]
+  description: Collection of all beneficiaries for a client
   get:
     description: Retrieve all beneficiaries.
+      queryParameters:
+        CustomerId:
+          displayName: Customer Id
+          type: string
+          description: Customer Unique Reference
+          example: ABC1234
+          required: false
     responses:
       200:
         body:
@@ -237,9 +353,16 @@ resourceTypes:
 #    description: Remove a number of beneficiaries.
   /{beneficiary}:
     displayName: Beneficiary
-    description: A beneficiary ... [TODO]
+    description: A beneficiary of the client
     get:
       description: Retrieve a beneficiary.
+      queryParameters:
+        CustomerId:
+          displayName: Beneficiary Id
+          type: string
+          description: Beneficiary Unique Reference
+          example: BEN1234
+          required: false
       responses:
         200:
           body:
@@ -253,14 +376,14 @@ resourceTypes:
 #      description: Remove a beneficiary.
 /holdings:
   displayName: Holdings
-  description: Collection of all holdings.
+  description: Collection of all holdings cor a client.
   get:
     description: Retrieve all holdings.
     queryParameters:
       extractDate:
         displayName: Extract Date
         type: datetime
-        description: TODO
+        description: Point in time of valuation, default to latest
         required: false
     responses:
       200:
@@ -269,7 +392,18 @@ resourceTypes:
             type: Holdings
   /{holding}:
     displayName: Holding
-    description: A holding ... [TODO]
+    description: A specific holding in an asset
+    queryParameters:
+      extractDate:
+        displayName: Extract Date
+        type: datetime
+        description: Point in time of valuation, default to latest
+        required: false
+      securityRef:
+        displayName: Security reference ID
+        type: string
+        description: Unique security reference
+        required: false
     get:
       responses:
         200:
@@ -298,10 +432,22 @@ resourceTypes:
                 type: Holdings
 /payments:
   displayName: Payments
-  description: Collection of all payments.
+  description: Collection of all payments made for an account or client.
   get:
     description: Retrieve all payments.
     queryParameters:
+      CustomerId:
+        displayName: Customer Id
+        type: string
+        description: Customer Unique Reference
+        example: ABC1234
+        required: false
+      AccountId:
+        displayName: Account Id
+        type: string
+        description: Account Unique Reference
+        example: ABC1234
+        required: false
     responses:
       200:
         body:
@@ -314,9 +460,16 @@ resourceTypes:
 #  delete:
 #    description: Remove a number of payments.
   /{payment}:
-    description: A single payment ... [TODO]
+    description: A single payment from an account.
     get:
       description: Retrieve a payment.
+      queryParameters:
+        PaymentId:
+          displayName: Payment Id
+          type: string
+          description: Payment Unique Reference
+          example: PAY1234
+          required: false
       responses:
         200:
           body:
@@ -334,6 +487,18 @@ resourceTypes:
   get:
     description: Retrieve all trades.
     queryParameters:
+      CustomerId:
+        displayName: Customer Id
+        type: string
+        description: Customer Unique Reference
+        example: ABC1234
+        required: false
+      AccountId:
+        displayName: Account Id
+        type: string
+        description: Account Unique Reference
+        example: ABC1234
+        required: false
     responses:
       200:
         body:
@@ -347,9 +512,10 @@ resourceTypes:
 #    description: Remove a number of trades.
   /{trade}:
     displayName: Trade
-    description: A trade ... [TODO]
+    description: A singel trade on an account
     get:
       description: Retrieve a single trade.
+      queryParameters:
       responses:
         200:
           body:
@@ -363,7 +529,7 @@ resourceTypes:
 #      description: Remove a trade.
 /users:
   displayName: Users
-  description: Collection of all users.
+  description: Collection of all users of the Multrees Web API.
   get:
     description: Retrieve all users.
 #  post:
@@ -374,7 +540,7 @@ resourceTypes:
 #    description: Remove a number of users.
   /{user}:
     displayName: User
-    description: A user ... [TODO]
+    description: A user of the Multrees Web API
     get:
       description: Retieve a user.
 #    post:
