@@ -10,7 +10,10 @@ baseUriParameters:
 protocols: [ HTTPS ]
 mediaType:
   - application/json
-description: Multrees Web API provides secure, programmatic access into the core elements of Multrees' services and data.  Version 1 focusses on exposing out 'GET' functionality for integration into Digital and Reporing Tools.  Version 2 will focus more on POST/PUT for integration into CRM and platform technologies.
+description: Multrees Web API provides secure, programmatic access into the core elements of Multrees' services and data.
+  Version 1 focusses on exposing out 'GET' functionality for integration into Digital and Reporing Tools.
+  Version 2 will focus on POST/PUT for integration into CRM and platform technologies.
+  Version 3 will integrate Corporate Action notifications and elections.
 types:
   Account:
     displayName: Account
@@ -20,20 +23,63 @@ types:
       customerId:
         type: string
         required: true
+      accountType:
+        type: string
+        description: Capital or Income
+        required: true
+      accountLocation:
+        type: string
+        description: Onshore or Offshore
+        required: true
       accountName:
         type: string
         required: true
+      accountDescription:
+        type: string
+        required: true
+      accountCurrency:
+        type: string
+        required: true
+      notes:
+        type: string
+        required: true
     example:
-      customerId : 123456
-      accountName : "John Smith ISA"
+      customerId: ABC001
+      accountType: Income
+      accountLocation: Onshore
+      accountName: Brian Smith Cash Account GBP
+      accountDescription: Brian Smith Cash Account GBP
+      accountCurrency: GBP
+      notes: Main onshore cash account for dealing
   Accounts:
     description: An array of accounts.
     type: Account[]
+    minItems: 1
+  ReportingGroup:
+    displayName: Reporting Group
+    description: A group of accounts for reporting.
+    type: object
+    properties:
+      groupId:
+        type: string
+        required: true
+      groupName:
+        type: string
+        required: true
+    example:
+      groupId : GRP1234
+      groupName : "John Smith Investments"
+  ReportingGroups:
+    description: An array of reporting Groups.
+    type: ReportingGroup[]
     minItems: 1
   Beneficiary:
     description: A beneficiary.
     properties:
       customerId:
+        type: string
+        required: true
+      accountId:
         type: string
         required: true
       accountName:
@@ -47,12 +93,18 @@ types:
         required: true
       relationship:
         type: string
+        required: false
+      notes:
+        type: string
+        required: false
     example:
       customerId : "ABC1234"
       date: "2017-01-20"
-      accountName : "Account Number 1"
+      accountId : "123456"
+      accountName : "Brian Smith ISA"
       internal: true
-      relationship: ""
+      relationship: "Accountant"
+      notes: ""
   Beneficiaries:
     description: An array of beneficiaries.
     type: Beneficiary[]
@@ -75,10 +127,13 @@ types:
       taxResidency :
         type: string
         required: true
-      taxResidency :
+      taxResidencyEffectiveDate :
+        type: date-only
+        required: true
+      nationality :
         type: string
         required: true
-      EffectiveDate :
+      effectiveDate :
         type: date-only
         required: true
       taxDomicile :
@@ -117,6 +172,12 @@ types:
       birthCountry :
         type: string
         required: true
+      NINO:
+        type: string
+        required: true
+      PEP:
+        type: boolean
+        required: true
       addressType :
         type: string
         required: true
@@ -125,29 +186,28 @@ types:
         required: true
       address2 :
         type: string
-        required: true
+        required: false
       address3 :
         type: string
-        required: true
+        required: false
       city :
         type: string
         required: true
       postalCode :
         type: string
         required: true
-      birthCountry :
-        type: string
-        required: true
       email :
         type: string
-        required: true
+        required: false
     example:
       customerId : ABC1234
       accountName : Brian Smith ISA Account
       customerType : Individual
       baseCurrency : GBP
       taxResidency : UK
-      taxResidencyEffectiveDate : 10/10/2004
+      taxResidencyEffectiveDate : 2004-10-10
+      effectiveDate: 2010-01-01
+      nationality: UK
       taxDomicile : UK
       taxYearEnd : 01/04
       taxStatus : Normal
@@ -157,16 +217,17 @@ types:
       firstname : Brian
       lastName : Smith
       gender : Male
-      dateOfBirth : 01/05/1974
+      dateOfBirth : 1974-01-01
       maritalStatus : Married
       birthCountry : UK
+      NINO: AD1234546L
+      PEP: false
       addressType : Home
       address1 : 10 Downing Street
-      address2 :
-      address3 :
+      address2 : Westminster
+      address3 : N/A
       city : London
       postalCode : AB13 8UK
-      birthCountry : UK
       email : Brian.Smith@wealth.com
   Clients:
     description: An array of clients.
@@ -178,12 +239,156 @@ types:
       customerId:
         type: string
         required: true
-      accountName:
+      extractDate :
+        type: date-only
+        required: true
+      groupName :
         type: string
         required: true
+      groupId :
+        type: string
+        required: true
+      clientName :
+        type: string
+        required: true
+      baseCurrency :
+        type: string
+        required: true
+      accountNumber :
+        type: string
+        required: true
+      accountName :
+        type: string
+        required: true
+      accountType :
+        type: string
+        required: true
+      securityName :
+        type: string
+        required: true
+      securityCCY :
+        type: string
+        required: true
+      securityISIN :
+        type: string
+        required: true
+      securitySEDOL :
+        type: string
+        required: true
+      quantity :
+        type: number
+        required: true
+      bookCostBase :
+        type: number
+        required: true
+      marketPriceGBP :
+        type: number
+        required: true
+      marketValueGBP :
+        type: number
+        required: true
+      accruedInterestGBP :
+        type: number
+        required: true
+      accruedInterestBase :
+        type: number
+        required: true
+      securityType :
+        type: string
+        required: true
+      instrumentType :
+        type: string
+        required: true
+      classification1 :
+        type: string
+        required: true
+      classification2 :
+        type: string
+        required: true
+      classification3 :
+        type: string
+        required: true
+      custodyAccountNumber :
+        type: string
+        required: true
+      custodyAccountName :
+        type: string
+        required: true
+      yield :
+        type: number
+        required: true
+      estimatedAnnualIncome :
+        type: number
+        required: true
+      reportingclass1seq :
+        type: number
+        required: true
+      reportingclass2seq :
+        type: number
+        required: true
+      reportingclass3seq :
+        type: number
+        required: true
+      marketPriceSec :
+        type: number
+        required: true
+      marketPriceBase :
+        type: number
+        required: true
+      marketValueBase :
+        type: number
+        required: true
+      marketValueSec :
+        type: number
+        required: true
+      bookCostSec :
+        type: number
+        required: true
+      fxRateGBP :
+        type: number
+        required: true
+      fxRate :
+        type: number
+        required: true
     example:
-      customerId : "ABC1234"
-      accountName : "Brian Smith ISA Account"
+      extractDate : 2017-06-27
+      groupName : Brian Smith Portfolio
+      groupId : GRP001
+      clientName : Brian Smith Discretionary
+      customerId : ABC1234
+      baseCurrency : GBP
+      accountNumber : ACC001
+      accountName : Brian Smith Discretionary
+      accountType : Investment
+      securityName : GOVT OF UK 0.375% INDEX LKD GILT 22/03/62
+      securityCCY : GBP
+      securityISIN : GB00B4PTCY75
+      securitySEDOL : B4PTCY7
+      quantity : 10000
+      bookCostBase : 21248.46
+      marketPriceGBP : 277.4239
+      marketValueGBP : 27276.317848
+      accruedInterestGBP : 2.39267966850829
+      accruedInterestBase : 2.39267966850829
+      securityType : UK Gilts
+      instrumentType : Bond
+      classification1 : Fixed Income
+      classification2 : N/A
+      classification3 : Government Bonds
+      custodyAccountNumber : ACC86613
+      custodyAccountName : MIS CUST Tillswood BNY A/c GENERAL
+      yield : 0.1499
+      estimatedAnnualIncome : 40.89078825
+      reportingclass1seq : 10
+      reportingclass2seq : 0
+      reportingclass3seq : 1
+      marketPriceSec : 277.4239
+      marketPriceBase : 277.4239
+      marketValueBase : 27276.317848
+      marketValueSec : 21248.46
+      bookCostSec : 27276.317848
+      fxRateGBP : 1
+      fxRate : 1
   Holdings:
     description: An array of holdings.
     type: Holding[]
@@ -194,15 +399,47 @@ types:
       customerId:
         type: string
         required: true
-      accountName:
+      valueDate:
+        type: date-only
+        required: true
+      debitAccountId:
+        type: string
+        required: true
+      debitAccountName:
+        type: string
+        required: true
+      debitAmount:
+        type: number
+        required: true
+      creditBankName:
+        type: string
+        required: true
+      creditAccountNo:
+        type: string
+        required: true
+      creditCurrency:
+        type: string
+        required: true
+      creditSortCode:
+        type: string
+        required: false
+      creditSWIFTAddress:
+        type: string
+        required: false
+      creditIBAN:
+        type: string
+        required: false
+      ReferenceNumber:
+        type: string
+        required: true
+      Notes:
         type: string
         required: true
       notice:
         type: date-only
         required: false
         displayName: Advanced Notice
-        description: |
-          If this is an advanced notice then this is the settlement date.
+        description: If this is an advanced notice then this is the settlement date.
           Otherwise it is the date of the payment.
       repeat:
         type: string
@@ -211,12 +448,71 @@ types:
         description: If this is a regular payment then describe the repeat.
     example:
       customerId : "ABC1234"
-      accountName : "Brian Smith ISA Account"
+      valueDate: 2017-07-10
+      debitAccountId: ACC003
+      debitAccountName: Brian Smith Cash Account GBP
+      debitAmount: 10000.00
+      creditBankName: Bank of Scotland
+      creditAccountNo: "12345678"
+      creditCurrency: GBP
+      creditSortCode: 11-22-33
+      creditSWIFTAddress: BICXXXXX12
+      creditIBAN: XXXX
+      ReferenceNumber: REF0001
+      Notes: Regular payment of income into current account
       repeat: "first day of month"
       notice: "2017-02-28"
   Payments:
     description: An array of payments.
     type: Payment[]
+    minItems: 1
+  FX:
+    description: An individual FX
+    properties:
+      customerId:
+        type: string
+        required: true
+      valueDate:
+        type: date-only
+        required: true
+      debitAccountId:
+        type: string
+        required: true
+      debitAccountName:
+        type: string
+        required: true
+      creditAccountId:
+        type: string
+        required: true
+      creditAccountName:
+        type: string
+        required: true
+      tradedCurrency:
+        type: string
+        required: true
+      againstCurrency:
+        type: string
+        required: true
+      orderType:
+        type: string
+        required: true
+      amount:
+        type: number
+        required: true
+    example:
+      customerId: ABC1234
+      valueDate: 2017-07-10
+      debitAccountId: ACC003
+      debitAccountName: Brian Smith Cash Account GBP
+      creditAccountId: ACC004
+      creditAccountName: Brian Smith Cash Account USD
+      tradedCurrency: USD
+      againstCurrency: GBP
+      orderType: Buy
+      amount: 10000.00
+  FXs:
+    description: An array of FXs.
+    type: FX[]
     minItems: 1
   Trade:
     description: A trade.
@@ -237,127 +533,156 @@ types:
 resourceTypes:
 /clients:
   displayName: Clients
-  description: Collection of all clients ... [TODO]
+  description: Collection of all clients
   get:
     description: Retrieve all clients.
-      queryParameters:
-        SearchTerm:
-          displayName: Search Term
-          type: string
-          description: Search on Account Name
-          example: Smith
-          required: false
+    queryParameters:
+      SearchTerm:
+        displayName: Search Term
+        type: string
+        description: Search on Client Name
+        example: Smith
+        required: false
     responses:
       200:
         body:
           application/json:
             type: Clients
-#  post:
-#    description: Create a number of clients.
-#  put:
-#    description: Update a number of clients.
-#  delete:
-#    description: Remove a number of clients.
+  post:
+    description: Create a number of new clients - TBD.
+  put:
+    description: Update a number of existing clients - TBD.
+  delete:
+    description: Remove a number of clients - TBD.
   /{client}:
     displayName: Client
     description: An individual or organisation investor
     get:
       description: Retrieve client details.
       queryParameters:
-        SearchTerm:
-          clientId: Unique client reference
+        GroupId:
+          displayName: Customer Id
+          type: string
+          description: Unique customer reference
+          example: ABC1234
+          required: true
       responses:
         200:
           body:
             application/json:
               type: Client
-#    post:
-#      description: Create a client.
-#    put:
-#      description: Update a client.
-#    delete:
-#      description: Remove a client.
+    post:
+      description: Create a new client - TBD.
+    put:
+      description: Update an existing client - TBD.
+    delete:
+      description: Remove a client - TBD.
 /accounts:
   displayName: Accounts
   description: Collection of all investment and cash accounts
   get:
     description: Retrieve all cash and investment accounts.
-      Group:
+    queryParameters:
+      GroupId:
         displayName: Level
         type: string
-        description: GROUP or CUST
-        example: CASH
-        required: false
-      AccountType:
-        displayName: Account Type
-        type: string
-        description:CASH or INV
-        example: CASH
+        description: Reporting Group Id
+        example: GRP001
         required: false
       SearchTerm:
         displayName: Search Term
         type: string
         description: Search on Account Name
         example: Smith
-        required: false    
+        required: false
     responses:
       200:
         body:
           application/json:
             type: Accounts
-#  post:
-#    description: Create a number of accounts.
-#  put:
-#    description: Update a number of accounts.
-#  delete:
-#    description: Remove a number of accounts.
+  post:
+    description: Create a number of new accounts - TBD.
+  put:
+    description: Update a number of existing accounts - TBD.
+  delete:
+    description: Remove a number of accounts - TBD.
   /{account}:
     displayName: Account
     description: Investment or cash accounts
     get:
       description: Retrieve an account.
-      queryParameters:
       responses:
         200:
           body:
             application/json:
               type: Account
-#    post:
-#      description: Create an account.
-#    put:
-#      description: Update an account.
-#    delete:
-#      description: Remove an account.
+    post:
+      description: Create a new account - TBD.
+    put:
+      description: Update an existing account - TBD.
+    delete:
+      description: Remove an account - TBD.
+/reportinggroups:
+  displayName: Reporting Groups
+  description: Collection of groups of accounts for reporting
+  get:
+    description: Retrieve all reporting groups
+    responses:
+      200:
+        body:
+          application/json:
+            type: ReportingGroups
+  post:
+    description: Create a number of new reporting groups - TBD.
+  put:
+    description: Update a number of existing reporting groups - TBD.
+  delete:
+    description: Remove a number of reporting groups - TBD.
+  /{ReportingGroup}:
+    displayName: Group
+    description: Groups of accounts for reporting
+    get:
+      description: Retrieve a reporting group.
+      responses:
+        200:
+          body:
+            application/json:
+              type: ReportingGroup
+    post:
+      description: Create a new reporting group - TBD.
+    put:
+      description: Update an existing reporting group - TBD.
+    delete:
+      description: Remove an reporting group - TBD.
 /beneficiaries:
   displayName: Beneficiaries
   description: Collection of all beneficiaries for a client
   get:
     description: Retrieve all beneficiaries.
-      queryParameters:
-        CustomerId:
-          displayName: Customer Id
-          type: string
-          description: Customer Unique Reference
-          example: ABC1234
-          required: false
+    queryParameters:
+      CustomerId:
+        displayName: Customer Id
+        type: string
+        example: ABC123456
+        required: false
     responses:
       200:
         body:
           application/json:
             type: Beneficiaries
-#  post:
-#    description: Create a number of beneficiaries.
-#  put:
-#    description: Update a number of beneficiaries.
-#  delete:
-#    description: Remove a number of beneficiaries.
+  post:
+    description: Create a number of new beneficiaries - TBD.
+  put:
+    description: Update a number of existing beneficiaries - TBD.
+  delete:
+    description: Remove a number of beneficiaries - TBD.
   /{beneficiary}:
     displayName: Beneficiary
     description: A beneficiary of the client
     get:
       description: Retrieve a beneficiary.
       queryParameters:
-        CustomerId:
+        BeneficiaryId:
           displayName: Beneficiary Id
           type: string
           description: Beneficiary Unique Reference
@@ -368,15 +693,15 @@ resourceTypes:
           body:
             application/json:
               type: Beneficiary
-#    post:
-#      description: Create a beneficiary.
-#    put:
-#      description: Update a beneficiary.
-#    delete:
-#      description: Remove a beneficiary.
+    post:
+      description: Create a new beneficiary - TBD.
+    put:
+      description: Update an existing beneficiary - TBD.
+    delete:
+      description: Remove a beneficiary - TBD.
 /holdings:
   displayName: Holdings
-  description: Collection of all holdings cor a client.
+  description: Collection of all holdings for a client.
   get:
     description: Retrieve all holdings.
     queryParameters:
@@ -393,18 +718,19 @@ resourceTypes:
   /{holding}:
     displayName: Holding
     description: A specific holding in an asset
-    queryParameters:
-      extractDate:
-        displayName: Extract Date
-        type: datetime
-        description: Point in time of valuation, default to latest
-        required: false
-      securityRef:
-        displayName: Security reference ID
-        type: string
-        description: Unique security reference
-        required: false
     get:
+      description: Retrieve specific holdings.
+      queryParameters:
+        extractDate:
+          displayName: Extract Date
+          type: datetime
+          description: Point in time of valuation, default to latest
+          required: false
+        securityRef:
+          displayName: Security reference ID
+          type: string
+          description: Unique security reference
+          required: false
       responses:
         200:
           body:
@@ -453,8 +779,8 @@ resourceTypes:
         body:
           application/json:
             type: Payments
-#  post:
-#    description: Create a number of payments.
+  post:
+    description: Create a number of payments - TBD.
 #  put:
 #    description: Update a number of payments.
 #  delete:
@@ -475,12 +801,63 @@ resourceTypes:
           body:
             application/json:
               type: Payment
-#    post:
-#      description: Create a payment.
+    post:
+      description: Create a payment - TBD.
 #    put:
 #      description: Update a payment.
 #    delete:
 #      description: Remove a payment.
+/FXs:
+  displayName: FXs
+  description: Collection of all FXs made for an account or client.
+  get:
+    description: Retrieve all FXs.
+    queryParameters:
+      CustomerId:
+        displayName: Customer Id
+        type: string
+        description: Customer Unique Reference
+        example: ABC1234
+        required: false
+      AccountId:
+        displayName: Account Id
+        type: string
+        description: Account Unique Reference
+        example: ABC1234
+        required: false
+    responses:
+      200:
+        body:
+          application/json:
+            type: FXs
+  post:
+    description: Create a number of FXs - TBD.
+#  put:
+#    description: Update a number of FXs.
+#  delete:
+#    description: Remove a number of FXs.
+  /{FX}:
+    description: A single FX from an account.
+    get:
+      description: Retrieve a FX.
+      queryParameters:
+        FXId:
+          displayName: FX Id
+          type: string
+          description: FX Unique Reference
+          example: PAY1234
+          required: false
+      responses:
+        200:
+          body:
+            application/json:
+              type: FX
+    post:
+      description: Create a FX - TBD.
+#    put:
+#      description: Update a FX.
+#    delete:
+#      description: Remove a FX.
 /trades:
   displayName: Trades
   description: Collection of all trades.
@@ -512,7 +889,7 @@ resourceTypes:
 #    description: Remove a number of trades.
   /{trade}:
     displayName: Trade
-    description: A singel trade on an account
+    description: A single trade on an account
     get:
       description: Retrieve a single trade.
       queryParameters:
@@ -527,6 +904,13 @@ resourceTypes:
 #      description: Update a trade.
 #    delete:
 #      description: Remove a trade.
+/corporateactions:
+  displayName: Corporate Actions Notifications/Elections
+  description: Collection of all corporate actions
+  get:
+    description: Retrieve all corporate actions notifications - TBD.
+  put:
+    description: Elect on a number of corporate actions - TBD.
 /users:
   displayName: Users
   description: Collection of all users of the Multrees Web API.
