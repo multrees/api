@@ -11,9 +11,9 @@ protocols: [ HTTPS ]
 mediaType:
   - application/json
 description: Multrees Web API provides secure, programmatic access into the core elements of Multrees' services and data.
-  Version 1 focusses on exposing out 'GET' functionality for integration into Digital and Reporting Tools.
-  Version 2 will focus on POST/PUT for integration into CRM and platform technologies.
-  Version 3 will integrate Corporate Action notifications and elections.
+  Release 1 focusses on exposing out 'GET' functionality for integration into Digital and Reporting Tools.
+  Release 2 will focus on POST/PUT for integration into CRM and platform technologies.
+  Release 3 will integrate Corporate Action notifications and elections.
 types:
   Account:
     displayName: Account
@@ -172,10 +172,10 @@ types:
       birthCountry :
         type: string
         required: true
-      NINO:
+      nino:
         type: string
         required: true
-      PEP:
+      pep:
         type: boolean
         required: true
       addressType :
@@ -220,8 +220,8 @@ types:
       dateOfBirth : 1974-01-01
       maritalStatus : Married
       birthCountry : UK
-      NINO: AD1234546L
-      PEP: false
+      nino: AD1234546L
+      pep: false
       addressType : Home
       address1 : 10 Downing Street
       address2 : Westminster
@@ -466,8 +466,8 @@ types:
     description: An array of payments.
     type: Payment[]
     minItems: 1
-  FX:
-    description: An individual FX
+  fx:
+    description: An individual fx
     properties:
       customerId:
         type: string
@@ -510,9 +510,9 @@ types:
       againstCurrency: GBP
       orderType: Buy
       amount: 10000.00
-  FXs:
-    description: An array of FXs.
-    type: FX[]
+  fxs:
+    description: An array of fxs.
+    type: fx[]
     minItems: 1
   Trade:
     description: An individual trade.
@@ -757,10 +757,22 @@ resourceTypes:
   get:
     description: Retrieve all holdings.
     queryParameters:
-      extractDate:
+      ExtractDate:
         displayName: Extract Date
         type: datetime
         description: Point in time of valuation, default to latest
+        required: false
+      CustomerId:
+        displayName: Customer Id
+        type: string
+        description: Customer Unique Reference
+        example: ABC1234
+        required: false
+      AccountId:
+        displayName: Account Id
+        type: string
+        description: Account Unique Reference
+        example: ABC1234
         required: false
     responses:
       200:
@@ -773,12 +785,12 @@ resourceTypes:
     get:
       description: Retrieve specific holdings.
       queryParameters:
-        extractDate:
+        ExtractDate:
           displayName: Extract Date
           type: datetime
           description: Point in time of valuation, default to latest
           required: false
-        securityRef:
+        SecurityRef:
           displayName: Security reference ID
           type: string
           description: Unique security reference
@@ -859,11 +871,11 @@ resourceTypes:
 #      description: Update a payment.
 #    delete:
 #      description: Remove a payment.
-/FXs:
-  displayName: FXs
-  description: Collection of all FXs made for an account or client.
+/fxs:
+  displayName: fxs
+  description: Collection of all fxs made for an account or client.
   get:
-    description: Retrieve all FXs.
+    description: Retrieve all fxs.
     queryParameters:
       CustomerId:
         displayName: Customer Id
@@ -881,35 +893,35 @@ resourceTypes:
       200:
         body:
           application/json:
-            type: FXs
+            type: fxs
   post:
-    description: Create a number of FXs - TBD.
+    description: Create a number of fxs - TBD.
 #  put:
-#    description: Update a number of FXs.
+#    description: Update a number of fxs.
 #  delete:
-#    description: Remove a number of FXs.
-  /{FX}:
-    description: A single FX from an account.
+#    description: Remove a number of fxs.
+  /{fx}:
+    description: A single fx from an account.
     get:
-      description: Retrieve a FX.
+      description: Retrieve a fx.
       queryParameters:
-        FXId:
-          displayName: FX Id
+        fxId:
+          displayName: fx Id
           type: string
-          description: FX Unique Reference
+          description: fx Unique Reference
           example: PAY1234
           required: false
       responses:
         200:
           body:
             application/json:
-              type: FX
+              type: fx
     post:
-      description: Create a FX - TBD.
+      description: Create a fx - TBD.
 #    put:
-#      description: Update a FX.
+#      description: Update a fx.
 #    delete:
-#      description: Remove a FX.
+#      description: Remove a fx.
 /trades:
   displayName: Trades
   description: Collection of all trades.
