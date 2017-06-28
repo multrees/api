@@ -515,17 +515,69 @@ types:
     type: FX[]
     minItems: 1
   Trade:
-    description: A trade.
+    description: An individual trade.
     properties:
-      customerId:
+      accountId:
         type: string
         required: true
       accountName:
         type: string
         required: true
+      SEDOL:
+        type: string
+        required: false
+      ISIN:
+        type: string
+        required: false
+      listingCountry:
+        type: string
+        required: false
+      transactionId:
+        type: string
+        required: true
+      tradeDate:
+        type: date-only
+        required: true
+      transactionType:
+        type: string
+        required: true
+      quantity:
+        type: number
+        required: true
+      proceeds:
+        type: number
+        required: true
+      expense:
+        type: number
+        required: true
+      exRate:
+        type: number
+        required: true
+      settlementDate:
+        type: date-only
+        required: true
+      currency:
+        type: string
+        required: true
+      cashCurrency:
+        type: string
+        required: true
     example:
-      customerId : "ABC1234"
-      accountName : "Brian Smith ISA Account"
+      accountId: ABC1234
+      accountName: Brian Smith ISA
+      SEDOL: B3H9JJ8
+      ISIN: ASD123456G
+      listingCountry: GBP
+      transactionId: I123456
+      tradeDate: 2017-03-01
+      transactionType: Buy
+      quantity: 10000
+      proceeds: 1377.89
+      expense: 1107.24
+      exRate: 1.0
+      settlementDate: 2017-03-03
+      currency: GBP
+      cashCurrency: GBP
   Trades:
     description: An array of trades.
     type: Trade[]
@@ -893,6 +945,12 @@ resourceTypes:
     get:
       description: Retrieve a single trade.
       queryParameters:
+        TransactionId:
+          displayName: Transaction Id
+          type: string
+          description: Transaction Unique Reference
+          example: I123456
+          required: true
       responses:
         200:
           body:
