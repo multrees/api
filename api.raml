@@ -1,0 +1,830 @@
+#%RAML 1.0
+title: Multrees WebAPI
+version: 1
+baseUri: http://api-live.multrees.com/{subfi?}/{fi}
+baseUriParameters:
+  fi:
+    type: string
+    description: The Financial Institute's short-code, supplied by Multrees.
+    displayName: Financial Institute
+  subfi:
+    type: string
+    description: The Financial Institute's short-code, supplied by Multrees.
+    displayName: Sub inancial Institute
+    required: false
+protocols: [ HTTP ]
+mediaType:
+  - application/json
+description: Multrees Web API provides secure, programmatic access into the core elements of Multrees' services and data.
+  Release 1 focusses on exposing out 'GET' functionality for integration into Digital and Reporting Tools.
+  Release 2 will focus on POST/PUT for integration into CRM and platform technologies.
+  Release 3 will integrate Corporate Action notifications and elections.
+types:
+  AssetAllocation:
+      displayName: Asset Allocation
+      description: Asset Allocations
+      type: object
+      properties:
+        extractDate:
+          type: datetime
+          description: Date of when data was valid from
+          required: true
+        clientName:
+          type: string
+          description: Name of the client
+          required: true
+        groupName:
+          type: string
+          description: Name of the group client belongs to
+          required: true
+        accountName:
+          type: string
+          description: Name of account client belongs to
+          required: true
+        classification1:
+          type: string
+          description: Classification assets is under
+          required: true
+        baseCurrency:
+          type: string
+          description: Base currency of asset
+          required: true
+        marketValue:
+          type: number
+          description: Market value of asset in base currency
+          required: true
+        weighting:
+          type: number
+          description: Weighting of asset from over all call
+          required: true
+        order:
+          type: integer
+          description: Order to group assets correctly based of the classification
+          required: true
+      example:
+        extractDate: 2018-08-07T00:00:00.0000000+00:00
+        clientName: John Smith
+        groupName: Group
+        accountName: John Smith
+        classification1: Cash
+        baseCurrency: GBP
+        marketValue: 280445.09304724244
+        weighting: 8.0318322297281721
+        order: 999
+  AssetAllocations:
+    description: An array of assets allocations.
+    type: AssetAllocation[]
+    minItems: 1
+  CashAccount:
+    displayName: Cash Account
+    description: A cash account.
+    type: object
+    properties:
+      accountId:
+        type: integer
+        description: Cash account id
+        required: true
+      accountNumber:
+        type: string
+        description: Cash account_number1 or display account id
+        required: true
+      fi:
+        type: string
+        description: FI Code
+        required: true
+      accountType:
+        type: string
+        description: Capital or Income
+        required: true
+      accountLocation:
+        type: string
+        description: Onshore or Offshore
+        required: true
+      accountName:
+        type: string
+        description: Friendly name given to account
+        required: true
+      accountDescription:
+        type: string
+        required: true
+      accountCurrency:
+        type: string
+        description: Account currency
+        required: true
+      clientBaseCurrency:
+        type: string
+        description: The clients base currency
+        required: true
+    example:
+      accountId: ABC001
+      accountNumber: 123334
+      fi: MIS
+      accountType: Income
+      accountLocation: Onshore
+      accountName: Brian Smith Cash Account GBP
+      accountDescription: Brian Smith Cash Account GBP
+      accountCurrency: GBP
+      clientBaseCurrency: GBP
+      fiBIC: FI's BIC code
+  CashAccounts:
+    description: : An array of Cash Accounts
+    type: CashAccount[]
+    minItems: 1
+  CashTransaction:
+    displayName: Cash Transactions
+    description: Cash Transactions
+    type: object
+    properties:
+      customerName:
+        type: string
+        description: Name of customer
+        required: true
+      groupName:
+        type: string
+        description: Name of group client belongs to
+        required: true
+      investmentAccountName:
+        type: string
+        description: Investment Account name transactions is linked to
+        required: true
+      cashAccountName:
+        type: string
+        description: Cash Account name transaction is linked to
+        required: true
+      cashAccountType:
+        type: string
+        description: Type of cash account
+        required: true
+      transactionId:
+        type: integer
+        description: Transaction ID
+        required: true
+      valueDate:
+        type: datetime
+        description: Value Date
+        required: true
+      postedDate:
+        type: datetime
+        description: Posted date of transaction
+        required: true
+      transactionType:
+        type: string
+        description: Transactions type
+        required: true
+      cerditDebit:
+        type: string
+        description: Direction of transaction
+        required: true
+      transactionCurrency:
+        type: string
+        description: Currency the transaction
+        required: true
+      transactionAmount:
+        type: number
+        description: Value in the transaction
+        required: true
+      transactionDescription:
+        type: string
+        description: Narrivate of the transaction
+        required: true
+  CashTransactions:
+    description: An array of accounts.
+    type: CashTransaction[]
+    minItems: 1
+  Client:
+    description: A client.
+    properties:
+      customerId:
+        type: string
+        required: true
+      accountName:
+        type: string
+        required: true
+      customerType :
+        type: string
+        required: true
+      baseCurrency :
+        type: string
+        required: true
+      taxResidency :
+        type: string
+        required: true
+      taxResidencyEffectiveDate :
+        type: date-only
+        required: true
+      nationality :
+        type: string
+        required: true
+      effectiveDate :
+        type: date-only
+        required: true
+      taxDomicile :
+        type: string
+        required: true
+      taxYearEnd :
+        type: string
+        required: true
+      taxStatus :
+        type: string
+        required: true
+      accountingMethod :
+        type: string
+        required: true
+      preferredLanguage :
+        type: string
+        required: true
+      title :
+        type: string
+        required: true
+      firstname :
+        type: string
+        required: true
+      lastName :
+        type: string
+        required: true
+      gender :
+        type: string
+        required: true
+      dateOfBirth :
+        type: date-only
+        required: true
+      maritalStatus :
+        type: string
+        required: true
+      birthCountry :
+        type: string
+        required: true
+      nino:
+        type: string
+        required: true
+      pep:
+        type: boolean
+        required: true
+      addressType :
+        type: string
+        required: true
+      address1 :
+        type: string
+        required: true
+      address2 :
+        type: string
+        required: false
+      address3 :
+        type: string
+        required: false
+      city :
+        type: string
+        required: true
+      postalCode :
+        type: string
+        required: true
+      email :
+        type: string
+        required: false
+    example:
+      customerId : ABC1234
+      accountName : Brian Smith ISA Account
+      customerType : Individual
+      baseCurrency : GBP
+      taxResidency : UK
+      taxResidencyEffectiveDate : 2004-10-10
+      effectiveDate: 2010-01-01
+      nationality: UK
+      taxDomicile : UK
+      taxYearEnd : 01/04
+      taxStatus : Normal
+      accountingMethod : FIFO
+      preferredLanguage : English
+      title : Mr
+      firstname : Brian
+      lastName : Smith
+      gender : Male
+      dateOfBirth : 1974-01-01
+      maritalStatus : Married
+      birthCountry : UK
+      nino: AD1234546L
+      pep: false
+      addressType : Home
+      address1 : 10 Downing Street
+      address2 : Westminster
+      address3 : N/A
+      city : London
+      postalCode : AB13 8UK
+      email : Brian.Smith@wealth.com
+  Clients:
+    description: An array of clients.
+    type: Client[]
+    minItems: 1
+  Holding:
+    description: A individual account holding
+    properties:
+      extractDate:
+        type: datetime
+        description: Date data is valid from
+        required: true
+      customerId:
+        type: integer
+        description: customers unique identifier
+        required: true
+      groupName:
+        type: string
+        description: Name of group holding is part of
+        required: true
+      groupId:
+        type: integer
+        description: Group ID
+        required: true
+      clientName:
+        type: string
+        description: Client's Name
+        required: true
+      customerRef:
+        type: string
+        description: Customer Ref from Account Platform
+        required: true
+      baseCurrency:
+        type: string
+        description: Base currency of the holding
+        required: true
+      accountNumber:
+        type: string
+        description: Account Number
+        required: true
+      accountName:
+        type: string
+        description: Account Name
+        required: true
+      accountType:
+        type: string
+        description: Account Type
+        required: true
+      securityId:
+        type: integer
+        description: The securities unique identifier
+        required: true
+      securityName:
+        type: string
+        description: Name of security
+        required: true
+      securityCCY:
+        type: string
+        description: CCY of the security
+        required: true
+      ISIN:
+        type: string
+        description: Securities ISIN
+        required: true
+      SEDOL:
+        type: string
+        description: Securities SEDOL
+        required: true
+      quantity:
+        type: number
+        description: Amount of security held
+        required: true
+      bookCost:
+        type: number
+        description: Book cost of security in base currency
+        required: true
+      marketPrice:
+        type: number
+        description: Market price in clients base currency
+        required: true
+      marketPriceSec:
+        type: number
+        description: Market price in security currency
+        required: true
+      marketPriceGBP:
+        type: number
+        description: Market price in Sterling
+        required: true
+      marketValue:
+        type: number
+        description: Market value in clients base currency
+        required: true
+      marketValueSec:
+        type: number
+        default: Market value in security currency
+        required: true
+      marketValueGBP:
+        type: number
+        description: Market value in Sterling
+        required: true
+      accruedInterest:
+        type: number
+        description: Accrued intrest in clients base currency
+        required: true
+      accruedInterestGBP:
+        type: number
+        description: Accrued intrest in sterling
+        required: true
+      securityType:
+        type: string
+        description: Security type
+        required: true
+      instrumentType:
+        type: string
+        description: Instrument type
+        required: true
+      classification1:
+        type: string
+        description: First level of client specific security classifications
+        required: true
+      classification2:
+        type: string
+        description: Second level of client specific security classifications
+        required: true
+      classification3:
+        type: string
+        description: Thrid level of client specific security classifications
+        required: true
+      custodyAccountNumber:
+        type: string
+        description: Custody account ID or unique identifier
+        required: true
+      custodyAccountName:
+        type: string
+        description: Custody account name
+        required: true
+      yield:
+        type: number
+        description: Yeild of holding
+        required: true
+      estimatedAnnualIncome:
+        type: number
+        description: Estimated annual income from the security
+        required: true
+      fxRateGBP :
+        type: number
+        description: Current FX rate used to covert security to sterling
+        required: true
+      fxRate :
+        type: number
+        description: Current FX rate used to covert security to clients base currency
+        required: true
+      couponDate:
+        type: datetime
+        description: CouponDate of the security
+        required: true
+    example:
+      extractDate : 2018-08-07T00:00:00.0000000+00:00
+      customerId: 12345
+      groupName : Brian Smith Portfolio
+      groupId : GRP001
+      clientName : Brian Smith Discretionary
+      clientRef: ABC1234
+      baseCurrency : GBP
+      accountNumber : ACC001
+      accountName : Brian Smith Discretionary
+      accountType : Investment
+      securityName : GOVT OF UK 0.375% INDEX LKD GILT 22/03/62
+      securityCCY : GBP
+      ISIN : GB00B4PTCY75
+      SEDOL : B4PTCY7
+      quantity : 10000
+      bookCost : 21248.46
+      bookCostSec : 21248.67
+      marketPrice : 277.4239
+      marketPriceSec : 277.4239
+      marketPriceGBP : 277.4239
+      marketValue: 21248.46
+      marketValueSec : 21248.46
+      marketValueGBP : 27276.317848
+      accruedInterest : 2.39267966850829
+      accruedInterestGBP : 2.39267966850829
+      securityType : UK Gilts
+      instrumentType : Bond
+      classification1 : Fixed Income
+      classification2 : N/A
+      classification3 : Government Bonds
+      custodyAccountNumber : ACC86613
+      custodyAccountName : MIS CUST Tillswood BNY A/c GENERAL
+      yield : 0.1499
+      estimatedAnnualIncome : 40.89078825
+      fxRateGBP : 1
+      fxRate : 1
+      couponDate: null
+  Holdings:
+    description: An array of holdings.
+    type: Holding[]
+    minItems: 1 
+  InvestmentAccount:
+    displayName: Investment Account
+    description: An investment account.
+    type: object
+    properties:
+      investmentAccountId:
+        type: integer
+        description: Investment account ID or unique identifier
+        required: true
+      investmentAccountName:
+        type: string
+        description: Investment account name
+        required: true
+      investmentAccountNumber:
+        type: string
+        description: Account number1
+        required: true
+      clientName:
+        type: string
+        description: Name of client
+        required: true
+      designationAccount:
+        type: string
+        description: Account designation
+        required: true
+    example:
+      investmentAccountId: 12345
+      investmentAccountName: Brian Smith Cash Account GBP
+      investmentAccountNumber: ABC001
+      clientName: Brian Smith
+      designationAccount: Brian Smith Cash Account GBP
+  InvestmentAccounts:
+    description: An array of investment accounts.
+    type: InvestmentAccount[]
+    minItems: 1
+  InvestmentTransaction:
+    displayName: Investment Transactions
+    description: Investment Transactions
+    type: object
+    properties:
+      customerName:
+        type: string
+        description: Name of customer
+        required: true
+      groupName:
+        type: string
+        description: Name of group client belongs to
+        required: true
+      investmentAccountNumber:
+        type: string
+        description: Account number1
+        required: true
+      investmentAccountName:
+        type: string
+        description: Investment Account name transaction is linked to
+        required: true
+      securityId:
+        type: integer
+        description: Security ID or unique identifier
+        required: true
+      securityName:
+        type: string
+        description: Security name
+        required: true
+      ISIN:
+        type: string
+        description: ISIN
+        required: true
+      SEDOL:
+        type: string
+        description: SEDOL
+        required: true
+      transactionType:
+        type: string
+        description: Transactions type
+        required: true
+      transactionDate:
+        type: datetime
+        description: Date and time of transaction
+        required: true
+      settlementDate:
+        type: datetime
+        description: Date and time transaction was settled
+        required: true
+      quantity: 
+        type: number
+        description: Amount of transaction
+        required: true
+      settlementCurrency:
+        type: string
+        description: Currency of settlement
+        required: true
+      priceInSettlementCurrecy:
+        type: number
+        description: Price of settlement in settlment currency
+        required: true
+      settlementAmount:
+        type: number
+        description: Amount of settlement
+        required: true
+      grossAmountInSettlementCurrency:
+        type: number
+        description: Gross amount in settlement currency
+        required: true
+      tradeCurrency:
+        type: string
+        description: Currency of trade
+        required: true
+      priceInTradeCurrency:
+        type: number
+        description: The price in traded currency
+        required: true
+      settlementAmountInTradeCurrency:
+        type: number
+        description: Amount of settlement from traded currency
+        required: true
+      grossAmountInTradeCurrency:
+        type: number
+        description: Gross amount in traded currency
+        required: true
+      baseCurrency:
+        type: string
+        description: Base currency of transaction
+        required: true
+      priceInBaseCurrency:
+        type: number
+        description: Price in base currency
+        required: true
+      settlementAmountInBaseCurrency:
+        type: number
+        description: Settlement amount in base currency
+        required: true
+      grossAmountInBaseCurrency:
+        type: number
+        description: Gross amount in base currency
+        required: true
+      custodyAccountNumber:
+        type: string
+        description: Custody account number
+        required: true
+      tradeStatus:
+        type: string
+        description: Status of the transaction/trade
+        required: true
+    example:
+      customerName: Smith, John
+      groupName: Group name xxxx
+      investmentAccountNumber: 112345
+      investmentAccountName: ISA P28105 John Smith
+      securityId: 77449
+      securityName: BLACKROCK ASSET
+      ISIN: IE00B26NX666
+      SEDOL: B65NX21
+      transactionType: Buy
+      transactionDate: 2015-04-20T00:00:00.0000000+00:00
+      settlementDate: 2015-04-23T00:00:00.0000000+00:00
+      quantity: 16222.223
+      settlementCurrency: GBP
+      priceInSettlementCurrecy: 9.123
+      settlementAmount: 14900
+      grossAmountInSettlementCurrency: 14904.814
+      tradeCurrency: GBP
+      priceInTradeCurrency: 13.176
+      settlementAmountInTradeCurrency: 19415.77
+      grossAmountInTradeCurrency: 19415.77
+      baseCurrency: GBP
+      priceInBaseCurrency: 10.974
+      settlementAmountInBaseCurrecy: 15030.012
+      grossAmountInBaseCurrency: 15030.012
+      custodyAccountNumber: Thirdparty
+      tradeStatus: Settled
+  InvestmentTransactions:
+    description: An array of Investment accounts.
+    type: InvestmentTransaction[]
+    minItems: 1
+resourceTypes:
+/assetallocation:
+  displayName: Asset Allocations
+  description: Collection of Asset Allocations
+  get:
+    description: Retrieve all asset allocations
+    queryParameters: 
+      LEVEL:
+        displayName: LEVEL
+        type: string
+        description: Defines which level the request is being made at
+        example: GROUP
+        required: true
+      filterId:
+        displayName: filterId
+        type: integer
+        description: Optional pass the ID you are looking for
+        example: 12345
+        required: false
+    responses:
+      200:
+        body:
+          application/json:
+            type: AssetAllocations
+/cash:
+  displayName: Cash
+  description: All calls relating to cash accounts
+  /account:
+    displayName: Cash Acounts Transactions
+    description: Collection of all transactions
+    get:
+      description: Retrieve all cash accounts
+      queryParameters: 
+        LEVEL:
+          displayName: LEVEL
+          type: string
+          description: Defines which level the request is being made at
+          example: GROUP
+          required: true
+        filterId:
+          displayName: filterId
+          type: integer
+          description: Optional ID you are looking for
+          example: 12345
+          required: false
+      responses:
+        200:
+          body:
+            application/json:
+              type: CashAccounts
+  /transaction:
+    displayName: Cash Acounts Transactions
+    description: Collection of all transactions
+    get:
+      description: Retrieve all cash transactions
+      queryParameters: 
+        LEVEL:
+          displayName: LEVEL
+          type: string
+          description: Defines which level the request is being made at
+          example: GROUP
+          required: true
+        filterId:
+          displayName: filterId
+          type: integer
+          description: Optional pass the ID you are looking for
+          example: 12345
+          required: false
+      responses:
+        200:
+          body:
+            application/json:
+              type: CashTransactions
+/holdings:
+  displayName: Holdings
+  description: Collection of all holdings for a client.
+  get:
+    description: Retrieve all holdings.
+    queryParameters:
+      LEVEL:
+        displayName: LEVEL
+        type: string
+        description: Level at which call is being made e.g. GROUP, CLIENT or WRAPPER
+        example: GROUP
+        required: true
+      filterId:
+        displayName: filterId
+        type: integer
+        description: Optional filterId or Unique Reference
+        example: 12345
+        required: false
+    responses:
+      200:
+        body:
+          application/json:
+            type: Holdings
+/investment:
+  displayName: Investment
+  description: All calls relating to investment accounts
+  /account:
+    displayName: Investment Accounts
+    description: Collection of all investment accounts
+    get:
+      description: Retrieve all investment accounts
+      queryParameters: 
+        LEVEL:
+          displayName: LEVEL
+          type: string
+          description: Defines which level the request is being made at
+          example: GROUP
+          required: true
+        filterId:
+          displayName: filterId
+          type: integer
+          description: Optional ID you are looking for
+          example: 12345
+          required: false
+      responses:
+        200:
+          body:
+            application/json:
+              type: InvestmentAccounts
+  /transaction:
+    displayName: Investment Transactions
+    description: Collection of all transactions
+    get:
+      description: Retrieve all investment transactions
+      queryParameters: 
+        LEVEL:
+          displayName: LEVEL
+          type: string
+          description: Defines which level the request is being made at
+          example: GROUP
+          required: true
+        filterId:
+          displayName: filterId
+          type: integer
+          description: Optional pass the ID you are looking for
+          example: 12345
+          required: false
+      responses:
+        200:
+          body:
+            application/json:
+              type: InvestmentTransactions
