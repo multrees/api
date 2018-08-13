@@ -35,15 +35,15 @@ types:
           required: true
         groupName:
           type: string
-          description: Name of the group client belongs to
+          description: Name of the group client belongs to (configurable)
           required: true
         accountName:
           type: string
-          description: Name of account client belongs to
+          description: Name of underlying client account
           required: true
         classification1:
           type: string
-          description: Classification assets is under
+          description: Classification of asset
           required: true
         baseCurrency:
           type: string
@@ -94,15 +94,15 @@ types:
         required: true
       accountType:
         type: string
-        description: Capital or Income
+        description: Capital/Income/Fee
         required: true
       accountLocation:
         type: string
-        description: Onshore or Offshore
+        description: Onshore/Offshore
         required: true
       accountName:
         type: string
-        description: Friendly name given to account
+        description: Display name given to account
         required: true
       accountDescription:
         type: string
@@ -113,7 +113,7 @@ types:
         required: true
       clientBaseCurrency:
         type: string
-        description: The clients base currency
+        description: The client's base currency
         required: true
     example:
       accountId: ABC001
@@ -141,35 +141,35 @@ types:
         required: true
       groupName:
         type: string
-        description: Name of group client belongs to
+        description: Name of group client belongs to (configurable)
         required: true
       investmentAccountName:
         type: string
-        description: Investment Account name transactions is linked to
+        description: Name of the Investment Account the cash transactions is linked to
         required: true
       cashAccountName:
         type: string
-        description: Cash Account name transaction is linked to
+        description: Name of the Cash Account the cash transactions is linked too
         required: true
       cashAccountType:
         type: string
-        description: Type of cash account
+        description: Capital/Income/Fee
         required: true
       transactionId:
         type: integer
-        description: Transaction ID
+        description: Unique Transaction ID
         required: true
       valueDate:
         type: datetime
-        description: Value Date
+        description: Value Date of transaction
         required: true
       postedDate:
         type: datetime
-        description: Posted date of transaction
+        description: Posted Date of transaction
         required: true
       transactionType:
         type: string
-        description: Transactions type
+        description: Transaction type
         required: true
       cerditDebit:
         type: string
@@ -177,15 +177,15 @@ types:
         required: true
       transactionCurrency:
         type: string
-        description: Currency the transaction
+        description: Currency of the transaction
         required: true
       transactionAmount:
         type: number
-        description: Value in the transaction
+        description: Value of the transaction
         required: true
       transactionDescription:
         type: string
-        description: Narrivate of the transaction
+        description: Narrative of the transaction
         required: true
   CashTransactions:
     description: An array of accounts.
@@ -523,7 +523,7 @@ types:
         required: true
       investmentAccountNumber:
         type: string
-        description: Account number1
+        description: Account number1 (alternative ID)
         required: true
       clientName:
         type: string
@@ -554,11 +554,11 @@ types:
         required: true
       groupName:
         type: string
-        description: Name of group client belongs to
+        description: Name of group client belongs to (configurable)
         required: true
       investmentAccountNumber:
         type: string
-        description: Account number1
+        description: Account number1 (alternative ID)
         required: true
       investmentAccountName:
         type: string
@@ -820,7 +820,7 @@ resourceTypes:
         filterId:
           displayName: filterId
           type: integer
-          description: Optional pass the ID you are looking for
+          description: Optionally pass the ID you are looking for
           example: 12345
           required: false
       responses:
