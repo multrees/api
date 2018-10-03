@@ -1,6 +1,6 @@
 #%RAML 1.0
 title: Multrees WebAPI
-version: 1
+version: 1.1
 baseUri: http://api-live.multrees.com/{subfi?}/{fi}
 baseUriParameters:
   fi:
@@ -16,9 +16,9 @@ protocols: [ HTTP ]
 mediaType:
   - application/json
 description: Multrees Web API provides secure, programmatic access into the core elements of Multrees' services and data.
-  Release 1 focusses on exposing out 'GET' functionality for integration into Digital and Reporting Tools.
-  Release 2 will focus on POST/PUT for integration into CRM and platform technologies.
-  Release 3 will integrate Corporate Action notifications and elections.
+  Version 1 focusses on exposing out 'GET' functionality for integration into Digital and Reporting Tools.
+  Version 2 will focus on POST/PUT for integration into CRM and platform technologies.
+  Version 3 will integrate Corporate Action notifications and elections.
 types:
   AssetAllocation:
       displayName: Asset Allocation
@@ -508,6 +508,76 @@ types:
     description: An array of holdings.
     type: Holding[]
     minItems: 1 
+  Performance:
+    displayName: : Performance
+    description: : Performance figures for an entity
+    type: object
+    properties:
+      BrandCD:
+        type: string
+        description: Clients brand code or FI Code
+        required: true
+      EntityType:
+        type: string
+        description: The level the call has been made at
+        required: true
+      EntityID:
+        type: integer
+        description: The entity ID or filter ID
+        required: true
+      EntityName:
+        type: string
+        description: The name of the entity that has been returned
+        required: true
+      YTD:
+        type: number
+        description: Year to date performance figure
+        required: true
+      ThreeMonths:
+        type: number
+        description: 3 month performance figure
+        required: true
+      SixMonths:
+        type: number
+        description: 6 month performance figure
+        required: true
+      OneYear:
+        type: number
+        description: 1 year performance figure
+        required: true
+      ThreeYears:
+        type: number
+        description: 3 year performance figure
+        required: true
+      FiveYears:
+        type: number
+        description: 5 year performance figure
+        required: true
+      SinceInception:
+        type: number
+        description: Since Inception performance figure
+        required: true
+      AnnualisedReturn:
+        type: number
+        description: Annualised return performance figure
+        required: true
+    example:
+      BrandCD: MWL
+      EntityType: ACCOUNT
+      EntityID: 112345
+      EntityName: John Smith
+      YTD: 0.7243937
+      ThreeMonths: 3.6242099561
+      SixMonths: 0.566282916
+      OneYear: 4.6953935008
+      ThreeYears: 22.9889393318
+      FiveYears: 0
+      SinceInception: 19.43456441
+      AnnualisedReturn: 1.23283847
+  Performances:
+    description: : An array of performance figures for an entity  
+    type: Performance[]
+    minItems: 1
   InvestmentAccount:
     displayName: Investment Account
     description: An investment account.
@@ -735,7 +805,7 @@ resourceTypes:
               type: CashAccounts
   /transaction:
     displayName: Cash Acounts Transactions
-    description: Collection of all transactions
+    description: Collection of all transactions, defaults to 30 days worth of transactions without from and to parameters populated.
     get:
       description: Retrieve all cash transactions
       queryParameters: 
@@ -750,6 +820,18 @@ resourceTypes:
           type: integer
           description: Optional pass the ID you are looking for
           example: 12345
+          required: false
+        from:
+          displayName: from
+          type: datetime
+          description: Optionally pass the date from
+          example: 2018-09-01
+          required: false
+        to:
+          displayName: to
+          type: datetime
+          description: Optionally pass the date to
+          example: 2018-09-30
           required: false
       responses:
         200:
@@ -779,6 +861,29 @@ resourceTypes:
         body:
           application/json:
             type: Holdings
+/performance:
+  displayName: Performance
+  description: All calls relation to performance
+  get:
+    description: Retrieve all performance for a specific entity.
+    queryParameters: 
+      LEVEL:
+        displayName: LEVEL
+        type: string
+        description: Level at which call is being made e.g. GROUP, CLIENT or WRAPPER
+        example: GROUP
+        required: true
+      filterId:
+        displayName: filterId
+        type: integer
+        description: Optional filterId or Unique Reference
+        example: 12345
+        required: false
+    responses: 
+      200:
+        body: 
+          application/json:
+            type: Performance
 /investment:
   displayName: Investment
   description: All calls relating to investment accounts
@@ -807,7 +912,7 @@ resourceTypes:
               type: InvestmentAccounts
   /transaction:
     displayName: Investment Transactions
-    description: Collection of all transactions
+    description: Collection of all transactions, defaults to 30 days without from and to parameters populated
     get:
       description: Retrieve all investment transactions
       queryParameters: 
@@ -822,6 +927,18 @@ resourceTypes:
           type: integer
           description: Optionally pass the ID you are looking for
           example: 12345
+          required: false
+        from:
+          displayName: from
+          type: datetime
+          description: Optionally pass the date from
+          example: 2018-09-01
+          required: false
+        to:
+          displayName: to
+          type: datetime
+          description: Optionally pass the date to
+          example: 2018-09-30
           required: false
       responses:
         200:
