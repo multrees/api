@@ -29,17 +29,13 @@ types:
           type: datetime
           description: Date of when data was valid from
           required: true
-        clientName:
+        entityType:
           type: string
-          description: Name of the client
+          description: The name of Entity or level that has been returned for that element
           required: true
-        groupName:
+        entityName:
           type: string
-          description: Name of the group client belongs to (configurable)
-          required: true
-        accountName:
-          type: string
-          description: Name of underlying client account
+          description: Relevant name of the Entity that hasbeen returned for that element (E.g. account name, client name ect)
           required: true
         classification1:
           type: string
@@ -63,9 +59,8 @@ types:
           required: true
       example:
         extractDate: 2018-08-07T00:00:00.0000000+00:00
-        clientName: John Smith
-        groupName: Group
-        accountName: John Smith
+        entityType: ACCOUNT
+        entityName: John Smith
         classification1: Cash
         baseCurrency: GBP
         marketValue: 280445.09304724244
@@ -74,6 +69,30 @@ types:
   AssetAllocations:
     description: An array of assets allocations.
     type: AssetAllocation[]
+  Classification:
+      displayName: Classification
+      description: Classifications
+      type: object
+      properties:
+        ClassificationType:
+          type: string
+          description: The type of classifcation asked for
+          required: true
+        ClassificationLabel:
+          type: string
+          description: The name of classification
+          required: true
+        ClassificationValue:
+          type: string
+          description: The platform ID for that classification
+          required: true
+      example:
+        ClassificationType: Geography
+        ClassificationLabel: Asia ex Japan
+        ClassificationValue: LNS_ASIA_E
+  Classifications:
+    description: An array of Classifications.
+    type: Classification[]
     minItems: 1
   CashAccount:
     displayName: Cash Account
@@ -777,6 +796,23 @@ resourceTypes:
         body:
           application/json:
             type: AssetAllocations
+  /classifications:
+    displayName: Classifications
+    description: Collection of Classifications
+    get:
+        description: Retrieve all classifications
+        queryParameters: 
+          ClassificationType:
+            displayName: ClassificationType
+            type: string
+            description: What type of classification your are trying to get
+            example: Geography
+            required: true
+        responses:
+          200:
+            body:
+              application/json:
+                type: Classifications
 /cash:
   displayName: Cash
   description: All calls relating to cash accounts
