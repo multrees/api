@@ -107,24 +107,17 @@ types:
         type: string
         description: Cash account_number1 or display account id
         required: true
-      fi:
+      brandCD:
         type: string
         description: FI Code
         required: true
-      accountType:
-        type: string
-        description: Capital/Income/Fee
-        required: true
       accountLocation:
         type: string
-        description: Onshore/Offshore
+        description: Country shortcode that is from IM Securities
         required: true
       accountName:
         type: string
         description: Display name given to account
-        required: true
-      accountDescription:
-        type: string
         required: true
       accountCurrency:
         type: string
@@ -134,17 +127,19 @@ types:
         type: string
         description: The client's base currency
         required: true
+      fiBIC:
+        type: string
+        description: The clients BIC code
+        required: true
     example:
       accountId: ABC001
       accountNumber: 123334
-      fi: MIS
-      accountType: Income
-      accountLocation: Onshore
+      brandCD: MIS
+      accountLocation: GB
       accountName: Brian Smith Cash Account GBP
-      accountDescription: Brian Smith Cash Account GBP
       accountCurrency: GBP
       clientBaseCurrency: GBP
-      fiBIC: FI's BIC code
+      fiBIC: WESVGB20A10
   CashAccounts:
     description: : An array of Cash Accounts
     type: CashAccount[]
@@ -815,10 +810,10 @@ resourceTypes:
                 type: Classifications
 /cash:
   displayName: Cash
-  description: All calls relating to cash accounts
-  /account:
-    displayName: Cash Acounts Transactions
-    description: Collection of all transactions
+  description: All calls relating to cash accounts  
+  /accounts:
+    displayName: Cash Accounts
+    description: Collection of all cash accounts
     get:
       description: Retrieve all cash accounts
       queryParameters: 
@@ -839,7 +834,24 @@ resourceTypes:
           body:
             application/json:
               type: CashAccounts
-  /transaction:
+  /accounts/{id}:
+    displayName: Cash Accounts ID
+    description: Single cash accounts by ID
+    uriParameters: 
+      id:
+        displayName: id
+        type: number
+        description: The cash account ID you are trying to retrieve
+        example: 12345
+        required: true
+    get:
+      description: Retrieve a single cash account
+      responses:
+        200:
+          body:
+            application/json:
+              type: CashAccount
+  /transactions:
     displayName: Cash Acounts Transactions
     description: Collection of all transactions, defaults to 30 days worth of transactions without from and to parameters populated.
     get:
