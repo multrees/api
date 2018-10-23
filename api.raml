@@ -958,6 +958,23 @@ resourceTypes:
           body:
             application/json:
               type: InvestmentAccounts
+  /accounts/{id}:
+    displayName: Investment Accounts ID
+    description: Single investment accounts by ID
+    uriParameters: 
+      id:
+        displayName: id
+        type: number
+        description: The invtesment account ID you are trying to retrieve
+        example: 12345
+        required: true
+    get:
+      description: Retrieve a single investment account
+      responses:
+        200:
+          body:
+            application/json:
+              type: InvestmentAccount
   /transaction:
     displayName: Investment Transactions
     description: Collection of all transactions, defaults to 30 days without from and to parameters populated
