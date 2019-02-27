@@ -1,82 +1,104 @@
 #%RAML 1.0
 title: Multrees WebAPI
-version: 1.1
-baseUri: http://api-live.multrees.com/{subfi?}/{fi}
+version: 1.2
+protocols: [ HTTPS ]
 baseUriParameters:
   fi:
     type: string
-    description: The Financial Institute's short-code, supplied by Multrees.
-    displayName: Financial Institute
+    description: The Financial Institution's short-code, supplied by Multrees.
+    displayName: Financial Institution Short Code
+    required: true
   subfi:
     type: string
-    description: The Financial Institute's short-code, supplied by Multrees.
-    displayName: Sub inancial Institute
+    description: An optional parameter to define an area within the Financial Institution.
+    displayName: Sub Financial Institution
     required: false
-protocols: [ HTTP ]
-mediaType:
-  - application/json
-description: Multrees Web API provides secure, programmatic access into the core elements of Multrees' services and data.
+
+baseUri: https://api-live.multrees.com:8443/{subfi}/{fi}
+
+mediaType: application/json
+description: The Multrees Web API provides secure, programmatic access into the core elements of Multrees' services and data.
   Version 1 focusses on exposing out 'GET' functionality for integration into Digital and Reporting Tools.
   Version 2 will focus on POST/PUT for integration into CRM and platform technologies.
   Version 3 will integrate Corporate Action notifications and elections.
 types:
   AssetAllocation:
       displayName: Asset Allocation
-      description: Asset Allocations
+      description: Asset Allocation
       type: object
       properties:
         extractDate:
           type: datetime
-          description: Date of when data was valid from
+          description: The day the data was last updated. Normally this will be close of business of the previous day.
           required: true
-        entityType:
+        EntityType:
           type: string
-          description: The name of Entity or level that has been returned for that element
+          description: The type of entity returned (ACCOUNT, GROUP or CUSTOMER)
           required: true
-        entityName:
+        EntityId:
+            type: string
+            description: The ID of the entity
+            required: true
+        EntityName:
           type: string
-          description: Relevant name of the Entity that hasbeen returned for that element (E.g. account name, client name ect)
+          description: The name of the  entity that has been returned (e.g. account name, client name or group name).
           required: true
         classification1:
           type: string
-          description: Classification of asset
+          description: The name of the Classification.
           required: true
         baseCurrency:
           type: string
-          description: Base currency of asset
+          description: The base reporting currency of entity.
           required: true
-        marketValue:
+        marketValueBase:
           type: number
-          description: Market value of asset in base currency
+          description: The market value in base currency
+          required: true
+        marketValueGBP:
+          type: number
+          description: The market value in GBP
+          required: true
+        marketValueEUR:
+          type: number
+          description: The market value in EUR
+          required: true
+        marketValueUSD:
+          type: number
+          description: The market value in USD
           required: true
         weighting:
           type: number
-          description: Weighting of asset from over all call
+          description: The weighting of asset from over all call.
           required: true
         order:
           type: integer
-          description: Order to group assets correctly based of the classification
+          description: The sort order used in client reporting based of the classification.
           required: true
       example:
-        extractDate: 2018-08-07T00:00:00.0000000+00:00
-        entityType: ACCOUNT
-        entityName: John Smith
-        classification1: Cash
-        baseCurrency: GBP
-        marketValue: 280445.09304724244
-        weighting: 8.0318322297281721
-        order: 999
+        extractDate: "2019-02-24T00:00:00.0000000+00:00"
+        EntityType: "GROUP"
+        EntityId: "12345"
+        EntityName: "Paul Smith"
+        classification1: "Fixed Income"
+        baseCurrency: "GBP"
+        marketValueBase: 8831.25
+        marketValueGBP: 8831.25
+        marketValueEUR: 10175.419238
+        marketValueUSD: 11537.145
+        weighting: 0.12055394528205418
+        order: 2
   AssetAllocations:
     description: An array of assets allocations.
     type: AssetAllocation[]
   Classification:
       displayName: Classification
-      description: Classifications
+      description: Retrurn all possible values a Classification can have
       type: object
       properties:
         ClassificationType:
           type: string
-          description: The type of classifcation asked for
+          description: The type of classifcation
           required: true
         ClassificationLabel:
           type: string
@@ -84,16 +106,92 @@ types:
           required: true
         ClassificationValue:
           type: string
-          description: The platform ID for that classification
+          description: The Multrees platform ID for that classification
           required: true
       example:
         ClassificationType: Geography
         ClassificationLabel: Asia ex Japan
-        ClassificationValue: LNS_ASIA_E
+        ClassificationValue: ABC_ASIA_E
   Classifications:
-    description: An array of Classifications.
-    type: Classification[]
-    minItems: 1
+        description: An array of Classifications.
+        type: Classification[]
+        minItems: 1
+  AUM:
+      displayName: Assets Under Management
+      description: returns all the total marlet value and bookcost
+                   in Base curremncy, GBP, EUR and USD.
+      type: object
+      properties:
+        ExtractDate:
+          type: datetime
+          description: The day the data was last updated. Normally this will be close of business of the previous day.
+          required: true
+        EntityType:
+          type: string
+          description: The type of entity returned (ACCOUNT, GROUP or CUSTOMER).
+          required: true
+        EntityId:
+          type: string
+          description: The Id of the entity returned.
+          required: true
+        EntityName:
+          type: string
+          description: The name of the entity returned.
+          required: true
+        BaseCurrency:
+          type: string
+          description: The base reporting currency of entity.
+          required: true
+        BookCostBase:
+          type: number
+          description: The Bookcost in base currency.
+          required: true
+        BookCostGBP:
+          type: number
+          description: The Bookcost in GBP.
+          required: true
+        BookCostEUR:
+          type: number
+          description: The Bookcost in EUR.
+          required: true
+        BookCostUSD:
+          type: number
+          description: The Bookcost in USD.
+          required: true
+        MarketValueBase:
+          type: number
+          description: The Market Value in base currency.
+          required: true
+        MarketValueGBP:
+          type: number
+          description: The Market Value in GBP.
+          required: true
+        MarketValueEUR:
+          type: number
+          description: The Market Value in EUR.
+          required: true
+        MarketValueUSD:
+          type: number
+          description: The Market Value in USD.
+          required: true
+      example:
+        ExtractDate: "2019-02-24T00:00:00.0000000+00:00"
+        EntityType: "GROUP"
+        EntityId: "101257"
+        EntityName: "The Paul Smith Trust"
+        BaseCurrency: "GBP"
+        BookCostBase: 6638633.98
+        BookCostGBP: 6638633.98
+        BookCostEUR: 7649073.90355988
+        BookCostUSD: 8672711.431472
+        MarketValueBase: 224096412.90316302
+        MarketValueGBP: 224096412.90316302
+        MarketValueEUR: 258205231.52550185
+        MarketValueUSD: 292759553.81669217
+  AssetsUnderManagement:
+        description: An array of AUM.
+        type: AUM[]
+        minItems: 1
   CashAccount:
     displayName: Cash Account
     description: A cash account.
@@ -101,45 +199,30 @@ types:
     properties:
       accountId:
         type: integer
-        description: Cash account id
+        description: The cash account's internal Id
         required: true
       accountNumber:
         type: string
-        description: Cash account_number1 or display account id
-        required: true
-      brandCD:
-        type: string
-        description: FI Code
-        required: true
-      accountLocation:
-        type: string
-        description: Country shortcode that is from IM Securities
+        description: The cash account's number.
         required: true
       accountName:
         type: string
-        description: Display name given to account
+        description: The display name given to the account
         required: true
       accountCurrency:
         type: string
-        description: Account currency
+        description: The Cash Account's currency
         required: true
-      clientBaseCurrency:
+      accountStatus:
         type: string
-        description: The client's base currency
-        required: true
-      fiBIC:
-        type: string
-        description: The clients BIC code
+        description: The status of the account
         required: true
     example:
-      accountId: ABC001
-      accountNumber: 123334
-      brandCD: MIS
-      accountLocation: GB
-      accountName: Brian Smith Cash Account GBP
-      accountCurrency: GBP
-      clientBaseCurrency: GBP
-      fiBIC: WESVGB20A10
+      accountId: 1234
+      accountNumber: "1001234"
+      accountName: "Brian Smith Cash Account GBP"
+      accountCurrency: "GBP"
+      accountStatus: "ACTIVE"
   CashAccounts:
     description: : An array of Cash Accounts
     type: CashAccount[]
@@ -149,25 +232,37 @@ types:
     description: Cash Transactions
     type: object
     properties:
-      customerName:
+      entityType:
         type: string
-        description: Name of customer
+        description: The type of parent entity searched for.
         required: true
-      groupName:
+      entityId:
         type: string
-        description: Name of group client belongs to (configurable)
+        description: The ID of the entity you searched for.
+        required: true
+      entityName:
+        type: string
+        description: The name of the parent entity.
+        required: true
+      investmentAccountNumber:
+        type: string
+        description: The parent Investment Account number that the cash transaction is linked to.
         required: true
       investmentAccountName:
         type: string
-        description: Name of the Investment Account the cash transactions is linked to
+        description: Name of the parent Investment Account the cash transaction is linked to
         required: true
       cashAccountName:
         type: string
-        description: Name of the Cash Account the cash transactions is linked too
+        description: Name of the Cash Account.
+        required: true
+      cashAccountNumber:
+        type: string
+        description: The Cash Account Number.
         required: true
       cashAccountType:
         type: string
-        description: Capital/Income/Fee
+        description: The type of the account (e.g. Income\Capital).
         required: true
       transactionId:
         type: integer
@@ -179,13 +274,13 @@ types:
         required: true
       postedDate:
         type: datetime
-        description: Posted Date of transaction
+        description: Posted Date of the cash transaction
         required: true
       transactionType:
         type: string
         description: Transaction type
         required: true
-      cerditDebit:
+      creditDebit:
         type: string
         description: Direction of transaction
         required: true
@@ -195,166 +290,121 @@ types:
         required: true
       transactionAmount:
         type: number
-        description: Value of the transaction
+        description: Value of the transaction in trasnaction currency.
+        required: true
+      cashTransactionStatus:
+        type: string
+        description: Status of transaction
         required: true
       transactionDescription:
         type: string
         description: Narrative of the transaction
         required: true
+      quantity:
+        type: number
+        description: Nominal of the related investment transaction
+        required: true
+      settledQuantity:
+        type: number
+        description:  The settled nominal of the related investment transaction
+        required: true
+      expectedSettlementDate:
+        type: datetime
+        description: The expected settlement date of the related investment transaction
+        required: true
+      investmentTransactionStatus:
+        type: string
+        description: Status of the related investment transaction
+        required: true
+      transDate:
+        type: datetime
+        description: Trade date of the related investment transaction
+        required: true
+    example:
+      entityType: "CUSTOMER"
+      entityId: "20821"
+      entityName: "Smith, Paul"
+      investmentAccountNumber: "1002746"
+      investmentAccountName: "Paul Smith Execution Only"
+      cashAccountName: "Paul Smith Execution Only - Income GBP"
+      cashAccountNumber: "1027856"
+      cashAccountType: "Income"
+      transactionId: 5624325
+      valueDate: "2019-02-21T00:00:00.0000000+00:00"
+      postedDate: "2019-02-21T16:59:39.0000000+00:00"
+      transactionType: "Trade"
+      creditDebit: "DEBIT"
+      transactionCurrency: "GBP"
+      transactionAmount: 2590
+      cashTransactionStatus: "Posted"
+      transactionDescription: "Buy 1716 AVON CAPITAL ESTATES 1 (SBF)"
+      quantity: 1716
+      settledQuantity: 1716
+      expectedSettlementDate: "2019-02-21T00:00:00.0000000+00:00"
+      investmentTransactionStatus: "Settled"
+      transDate: "2019-02-18T00:00:00.0000000+00:00"
   CashTransactions:
     description: An array of accounts.
     type: CashTransaction[]
     minItems: 1
   Client:
+    type: object
     description: A client.
+    displayName: The properties of a client
     properties:
       customerId:
+        type: integer
+        description: Multrees' internal customer Id
+        required: true
+      customerName:
+        type: string
+        description: Name of the customer
+        required: true
+      customerRef:
+        description: The customer reference number.
         type: string
         required: true
-      accountName:
+      customerDomicile:
+        description: The customer's country of domicile
         type: string
         required: true
-      customerType :
+      customerBaseCurrency :
         type: string
+        description: The customer's base reporting currency
         required: true
-      baseCurrency :
+      customerStatus:
         type: string
+        description: The status of the customer (e.g. Proven, Closed)
         required: true
-      taxResidency :
-        type: string
-        required: true
-      taxResidencyEffectiveDate :
-        type: date-only
-        required: true
-      nationality :
-        type: string
-        required: true
-      effectiveDate :
-        type: date-only
-        required: true
-      taxDomicile :
-        type: string
-        required: true
-      taxYearEnd :
-        type: string
-        required: true
-      taxStatus :
-        type: string
-        required: true
-      accountingMethod :
-        type: string
-        required: true
-      preferredLanguage :
-        type: string
-        required: true
-      title :
-        type: string
-        required: true
-      firstname :
-        type: string
-        required: true
-      lastName :
-        type: string
-        required: true
-      gender :
-        type: string
-        required: true
-      dateOfBirth :
-        type: date-only
-        required: true
-      maritalStatus :
-        type: string
-        required: true
-      birthCountry :
-        type: string
-        required: true
-      nino:
-        type: string
-        required: true
-      pep:
-        type: boolean
-        required: true
-      addressType :
-        type: string
-        required: true
-      address1 :
-        type: string
-        required: true
-      address2 :
-        type: string
-        required: false
-      address3 :
-        type: string
-        required: false
-      city :
-        type: string
-        required: true
-      postalCode :
-        type: string
-        required: true
-      email :
-        type: string
-        required: false
     example:
-      customerId : ABC1234
-      accountName : Brian Smith ISA Account
-      customerType : Individual
-      baseCurrency : GBP
-      taxResidency : UK
-      taxResidencyEffectiveDate : 2004-10-10
-      effectiveDate: 2010-01-01
-      nationality: UK
-      taxDomicile : UK
-      taxYearEnd : 01/04
-      taxStatus : Normal
-      accountingMethod : FIFO
-      preferredLanguage : English
-      title : Mr
-      firstname : Brian
-      lastName : Smith
-      gender : Male
-      dateOfBirth : 1974-01-01
-      maritalStatus : Married
-      birthCountry : UK
-      nino: AD1234546L
-      pep: false
-      addressType : Home
-      address1 : 10 Downing Street
-      address2 : Westminster
-      address3 : N/A
-      city : London
-      postalCode : AB13 8UK
-      email : Brian.Smith@wealth.com
+        customerId: 123456
+        customerName: "Smith, Paul"
+        customerRef: "ABC2356"
+        customerDomicile: "GB"
+        customerBaseCurrency: "GBP"
+        customerStatus: "PROVEN"
   Clients:
     description: An array of clients.
     type: Client[]
     minItems: 1
   Holding:
-    description: A individual account holding
+    description: A single position
     properties:
       extractDate:
         type: datetime
-        description: Date data is valid from
+        description: The day the data was last updated. Normally this will be close of business of the previous day.
         required: true
-      customerId:
-        type: integer
-        description: customers unique identifier
-        required: true
-      groupName:
+      EntityType:
         type: string
-        description: Name of group holding is part of
+        description: The type of entity searched for.
         required: true
-      groupId:
-        type: integer
-        description: Group ID
-        required: true
-      clientName:
+      EntityId:
         type: string
-        description: Client's Name
+        description: The ID of the entity searched for.
         required: true
-      customerRef:
+      EntityName:
         type: string
-        description: Customer Ref from Account Platform
+        description: The name of the entity searched for.
         required: true
       baseCurrency:
         type: string
@@ -374,7 +424,7 @@ types:
         required: true
       securityId:
         type: integer
-        description: The securities unique identifier
+        description: The security's unique identifier
         required: true
       securityName:
         type: string
@@ -382,55 +432,79 @@ types:
         required: true
       securityCCY:
         type: string
-        description: CCY of the security
+        description: The local price currency of the security
         required: true
       ISIN:
         type: string
-        description: Securities ISIN
+        description: The Security's ISIN
         required: true
       SEDOL:
         type: string
-        description: Securities SEDOL
+        description: The Security's SEDOL
         required: true
       quantity:
         type: number
-        description: Amount of security held
+        description: The traded nominal of the position
         required: true
-      bookCost:
+      bookCostBase:
         type: number
         description: Book cost of security in base currency
         required: true
-      marketPrice:
+      bookCostGBP:
         type: number
-        description: Market price in clients base currency
+        description: Book cost of security in GBP
+        required: true
+      bookCostEUR:
+        type: number
+        description: Book cost of security in EUR
+        required: true
+      bookCostUSD:
+        type: number
+        description: Book cost of security in USD
+        required: true
+      bookCostSec:
+        type: number
+        description: Book cost of security in security currency
         required: true
       marketPriceSec:
         type: number
         description: Market price in security currency
         required: true
-      marketPriceGBP:
-        type: number
-        description: Market price in Sterling
-        required: true
-      marketValue:
-        type: number
-        description: Market value in clients base currency
-        required: true
       marketValueSec:
         type: number
-        default: Market value in security currency
+        description: The dirty market value in security currency
         required: true
       marketValueGBP:
         type: number
-        description: Market value in Sterling
+        description: The dirty market value in GBP
         required: true
-      accruedInterest:
+      marketValueUSD:
         type: number
-        description: Accrued intrest in clients base currency
+        description: The dirty market value in USD
+        required: true
+      marketValueEUR:
+        type: number
+        description: The dirty market value in EUR
+        required: true
+      marketValueBase:
+        type: number
+        description: The dirty market value in client base currency
         required: true
       accruedInterestGBP:
         type: number
-        description: Accrued intrest in sterling
+        description: Accrued intrest in GBP
+        required: true
+      accruedInterestUSD:
+        type: number
+        description: Accrued intrest in USD
+        required: true
+      accruedInterestEUR:
+        type: number
+        description: Accrued intrest in EUR
+        required: true
+      accruedInterestBase:
+        type: number
+        description: Accrued intrest in clients base currency
         required: true
       securityType:
         type: string
@@ -445,13 +519,13 @@ types:
         description: First level of client specific security classifications
         required: true
       classification2:
-        type: string
+        type: string | nil
         description: Second level of client specific security classifications
-        required: true
+        required: false
       classification3:
-        type: string
+        type: string | nil
         description: Thrid level of client specific security classifications
-        required: true
+        required: false
       custodyAccountNumber:
         type: string
         description: Custody account ID or unique identifier
@@ -462,66 +536,60 @@ types:
         required: true
       yield:
         type: number
-        description: Yeild of holding
+        description: Yeild of the security
         required: true
       estimatedAnnualIncome:
         type: number
         description: Estimated annual income from the security
         required: true
-      fxRateGBP :
-        type: number
-        description: Current FX rate used to covert security to sterling
-        required: true
       fxRate :
         type: number
-        description: Current FX rate used to covert security to clients base currency
-        required: true
-      couponDate:
-        type: datetime
-        description: CouponDate of the security
+        description: Current FX rate used to covert security to base currency
         required: true
     example:
-      extractDate : 2018-08-07T00:00:00.0000000+00:00
-      customerId: 12345
-      groupName : Brian Smith Portfolio
-      groupId : GRP001
-      clientName : Brian Smith Discretionary
-      clientRef: ABC1234
-      baseCurrency : GBP
-      accountNumber : ACC001
-      accountName : Brian Smith Discretionary
-      accountType : Investment
-      securityName : GOVT OF UK 0.375% INDEX LKD GILT 22/03/62
-      securityCCY : GBP
-      ISIN : GB00B4PTCY75
-      SEDOL : B4PTCY7
-      quantity : 10000
-      bookCost : 21248.46
-      bookCostSec : 21248.67
-      marketPrice : 277.4239
-      marketPriceSec : 277.4239
-      marketPriceGBP : 277.4239
-      marketValue: 21248.46
-      marketValueSec : 21248.46
-      marketValueGBP : 27276.317848
-      accruedInterest : 2.39267966850829
-      accruedInterestGBP : 2.39267966850829
-      securityType : UK Gilts
-      instrumentType : Bond
-      classification1 : Fixed Income
-      classification2 : N/A
-      classification3 : Government Bonds
-      custodyAccountNumber : ACC86613
-      custodyAccountName : MIS CUST Tillswood BNY A/c GENERAL
-      yield : 0.1499
-      estimatedAnnualIncome : 40.89078825
-      fxRateGBP : 1
-      fxRate : 1
-      couponDate: null
+      extractDate: "2019-02-24T00:00:00.0000000+00:00"
+      EntityType: "GROUP"
+      EntityId: "100617"
+      EntityName: "Paul Smith"
+      baseCurrency: "GBP"
+      accountNumber: "1126704"
+      accountName: "Paul Smith ISA"
+      accountType: "Trust"
+      securityId: 6062
+      securityName: "HERONBRIDGE UK EQUITY FUND CLS'A'UNITS"
+      securityCCY: "GBP"
+      ISIN: "GB00B0TN1N90"
+      SEDOL: "B0TN1N9"
+      quantity: 8114.1823
+      bookCostBase: 205253.92
+      bookCostGBP: 205253.92
+      bookCostEUR: 267979.517952
+      bookCostUSD: 236304.32250976
+      bookCostSec: 205253.92
+      marketPriceSec: 26.279
+      marketValueSec: 213232.596662
+      marketValueGBP: 213232.596662
+      marketValueUSD: 278396.47820190719
+      marketValueEUR: 245489.99741983405
+      marketValueBase: 213232.596662
+      accruedInterestGBP: 0
+      accruedInterestUSD: 0
+      accruedInterestEUR: 0
+      accruedInterestBase: 0
+      securityType: "Other Funds 4dp"
+      instrumentType: "Fund"
+      classification1: "Equities"
+      classification2: "United Kingdom"
+      classification3: null
+      custodyAccountNumber: "ABCIMWSTAX"
+      custodyAccountName: "IMWS (Nominees) Limited a/c ABCTAX"
+      yield: 2.57
+      estimatedAnnualIncome: 5469.84257
+      fxRate: 1
   Holdings:
     description: An array of holdings.
     type: Holding[]
-    minItems: 1 
+    minItems: 1
   Performance:
     displayName: : Performance
     description: : Performance figures for an entity
@@ -529,15 +597,15 @@ types:
     properties:
       BrandCD:
         type: string
-        description: Clients brand code or FI Code
+        description: Client's FI Code
         required: true
       EntityType:
         type: string
-        description: The level the call has been made at
+        description: The level the data is at (ACCOUNT, GROUP or CUSTOMER).
         required: true
       EntityID:
-        type: integer
-        description: The entity ID or filter ID
+        type: string
+        description: The ID  of the entity.
         required: true
       EntityName:
         type: string
@@ -545,51 +613,96 @@ types:
         required: true
       YTD:
         type: number
-        description: Year to date performance figure
+        description: Year to date performance to close of business yesterday.
         required: true
       ThreeMonths:
         type: number
-        description: 3 month performance figure
+        description: 3 month performance to the end of the last quarter
         required: true
       SixMonths:
         type: number
-        description: 6 month performance figure
+        description: 6 month performance to the end of the last quarter
         required: true
       OneYear:
         type: number
-        description: 1 year performance figure
+        description: 1 year performance to the end of the last quarter
         required: true
       ThreeYears:
         type: number
-        description: 3 year performance figure
+        description: 3 year performance to the end of the last quarter
         required: true
       FiveYears:
         type: number
-        description: 5 year performance figure
+        description: 5 year performance to the end of the last quarter
         required: true
       SinceInception:
         type: number
-        description: Since Inception performance figure
+        description: Since Inception performance to close of business yesterday.
         required: true
       AnnualisedReturn:
         type: number
-        description: Annualised return performance figure
+        description: Annualised return to close of business yesterday.
+        required: true
+      InceptionDate:
+        type: datetime
+        description: The inception date.
+        required: true
+      Year1:
+        type: number
+        description: 1 year performance for previous year (e.g. 2018 performance in 2019)
+        required: true
+      Year2:
+        type: number
+        description: 1 year performance for two years ago (e.g. 2017 performance in 2019)
+        required: true
+      Year3:
+        type: number
+        description:  1 year performance for three years ago (e.g. 2016 performance in 2019)
+        required: true
+      Year4:
+        type: number
+        description:  1 year performance for four years ago (e.g. 2015 performance in 2019)
+        required: true
+      Year5:
+        type: number
+        description:  1 year performance for five years ago (e.g. 2014 performance in 2019)
+        required: true
+      YTDQE:
+        type: number
+        description: Year to Date peformance to end of last quarter
+        required: true
+      SinceInceptionQE:
+        type: number
+        description: Since Inception peformance to end of last quarter
+        required: true
+      AnnualisedReturnQE:
+        type: number
+        description: Annualised return to end of last quarter
         required: true
     example:
-      BrandCD: MWL
-      EntityType: ACCOUNT
-      EntityID: 112345
-      EntityName: John Smith
-      YTD: 0.7243937
-      ThreeMonths: 3.6242099561
-      SixMonths: 0.566282916
-      OneYear: 4.6953935008
-      ThreeYears: 22.9889393318
+      BrandCD: "ABC"
+      EntityType: "ACCOUNT"
+      EntityID: "101234"
+      EntityName: "Paul Smith  ISA"
+      YTD: -2.25426374
+      ThreeMonths: -7.409
+      SixMonths: -5.9804
+      OneYear: -5.4487
+      ThreeYears: 14.2067
       FiveYears: 0
-      SinceInception: 19.43456441
-      AnnualisedReturn: 1.23283847
-  Performances:
-    description: : An array of performance figures for an entity  
+      SinceInception: 17.58468574
+      AnnualisedReturn: 4.34846258
+      InceptionDate: "2015-03-13T00:00:00.0000000+00:00"
+      Year1: 7.8859
+      Year2: 11.9578
+      Year3: 0
+      Year4: 0
+      Year5: 0
+      YTDQE: -5.4487
+      SinceInceptionQE: 14.6768
+      AnnualisedReturnQE: 3.66410000211
+  PerformanceTable:
+    description: : An array of performance figures for an entity
     type: Performance[]
     minItems: 1
   InvestmentAccount:
@@ -597,32 +710,32 @@ types:
     description: An investment account.
     type: object
     properties:
-      investmentAccountId:
+      accountId:
         type: integer
-        description: Investment account ID or unique identifier
+        description: The internal Multrees Investment account ID
         required: true
-      investmentAccountName:
+      accountNumber:
         type: string
-        description: Investment account name
+        description: The Investment Account Number
         required: true
-      investmentAccountNumber:
+      accountName:
         type: string
-        description: Account number1 (alternative ID)
+        description: The investment account name.
         required: true
-      clientName:
+      accountType:
         type: string
-        description: Name of client
+        description: The account type
         required: true
-      designationAccount:
+      accountStatus:
         type: string
-        description: Account designation
+        description: The account Status (e.g. Active or closed)
         required: true
     example:
-      investmentAccountId: 12345
-      investmentAccountName: Brian Smith Cash Account GBP
-      investmentAccountNumber: ABC001
-      clientName: Brian Smith
-      designationAccount: Brian Smith Cash Account GBP
+      accountId: 101234
+      accountNumber: "1101234"
+      accountName: "Paul Smith ISA"
+      accountType: "ISA"
+      accountStatus: "ACTIVE"
   InvestmentAccounts:
     description: An array of investment accounts.
     type: InvestmentAccount[]
@@ -632,21 +745,29 @@ types:
     description: Investment Transactions
     type: object
     properties:
-      customerName:
+      EntityType:
         type: string
-        description: Name of customer
+        description: The type of entity being searched for
         required: true
-      groupName:
+      EntityId:
         type: string
-        description: Name of group client belongs to (configurable)
+        description: The Id of the entity being searched for.
+        required: true
+      EntityName:
+        type: string
+        description: The name of the entity being searched for.
+        required: true
+      investmentTransactionId:
+        type: integer
+        description: The unique transaction ID.
         required: true
       investmentAccountNumber:
         type: string
-        description: Account number1 (alternative ID)
+        description: The investment account number
         required: true
       investmentAccountName:
         type: string
-        description: Investment Account name transaction is linked to
+        description: The name of the investment account.
         required: true
       securityId:
         type: integer
@@ -666,7 +787,7 @@ types:
         required: true
       transactionType:
         type: string
-        description: Transactions type
+        description: The type of transaction
         required: true
       transactionDate:
         type: datetime
@@ -676,21 +797,25 @@ types:
         type: datetime
         description: Date and time transaction was settled
         required: true
-      quantity: 
+      quantity:
         type: number
-        description: Amount of transaction
+        description: Nominal of transaction
+        required: true
+      securityCurrency:
+        type: string
+        description: The local security price currency
+        required: true
+      priceSecCurrency:
+        type: number
+        description: Price in security currency
         required: true
       settlementCurrency:
         type: string
-        description: Currency of settlement
-        required: true
-      priceInSettlementCurrecy:
-        type: number
-        description: Price of settlement in settlment currency
+        description: The settlement currency
         required: true
       settlementAmount:
         type: number
-        description: Amount of settlement
+        description: Transaction amount in settlement currency.
         required: true
       grossAmountInSettlementCurrency:
         type: number
@@ -698,15 +823,11 @@ types:
         required: true
       tradeCurrency:
         type: string
-        description: Currency of trade
-        required: true
-      priceInTradeCurrency:
-        type: number
-        description: The price in traded currency
+        description: Currency of trasnaction
         required: true
       settlementAmountInTradeCurrency:
         type: number
-        description: Amount of settlement from traded currency
+        description: Settlement amount in traded currency
         required: true
       grossAmountInTradeCurrency:
         type: number
@@ -715,10 +836,6 @@ types:
       baseCurrency:
         type: string
         description: Base currency of transaction
-        required: true
-      priceInBaseCurrency:
-        type: number
-        description: Price in base currency
         required: true
       settlementAmountInBaseCurrency:
         type: number
@@ -734,113 +851,225 @@ types:
         required: true
       tradeStatus:
         type: string
-        description: Status of the transaction/trade
+        description: Status of the transaction
         required: true
     example:
-      customerName: Smith, John
-      groupName: Group name xxxx
-      investmentAccountNumber: 112345
-      investmentAccountName: ISA P28105 John Smith
-      securityId: 77449
-      securityName: BLACKROCK ASSET
-      ISIN: IE00B26NX666
-      SEDOL: B65NX21
-      transactionType: Buy
-      transactionDate: 2015-04-20T00:00:00.0000000+00:00
-      settlementDate: 2015-04-23T00:00:00.0000000+00:00
-      quantity: 16222.223
-      settlementCurrency: GBP
-      priceInSettlementCurrecy: 9.123
-      settlementAmount: 14900
-      grossAmountInSettlementCurrency: 14904.814
-      tradeCurrency: GBP
-      priceInTradeCurrency: 13.176
-      settlementAmountInTradeCurrency: 19415.77
-      grossAmountInTradeCurrency: 19415.77
-      baseCurrency: GBP
-      priceInBaseCurrency: 10.974
-      settlementAmountInBaseCurrecy: 15030.012
-      grossAmountInBaseCurrency: 15030.012
-      custodyAccountNumber: Thirdparty
-      tradeStatus: Settled
+      EntityType: "CUSTOMER"
+      EntityId: "101234"
+      EntityName: "Smith, Paul"
+      investmentTransactionId: 1889752
+      investmentAccountNumber: "1104321"
+      investmentAccountName: "Paul Smith Execution Only"
+      securityId: 270540,
+      securityName: "ISHARES VI PLC EDGE MSCI WLD MIN VOL UCITS ETF USD ACC"
+      ISIN: "IE00B8FHGS14"
+      SEDOL: "B894QH7"
+      transactionType: "Buy"
+      transactionDate: "2018-12-11T00:00:00.0000000+00:00"
+      settlementDate: "2018-12-13T00:00:00.0000000+00:00"
+      quantity: 1725
+      securityCurrency: "GBP"
+      priceSecCurrency: 35
+      settlementCurrency: "GBP"
+      settlementAmount: 60405.19
+      grossAmountInSettlementCurrency: 60375
+      tradeCurrency: "GBP"
+      settlementAmountInTradeCurrency: 60405.19
+      grossAmountInTradeCurrency: 60375
+      baseCurrency: "GBP"
+      settlementAmountInBaseCurrency: 60405.19
+      grossAmountInBaseCurrency: 60375
+      custodyAccountNumber: "MIS CUST ABC A/c ONSHORE"
+      tradeStatus: "Settled"
   InvestmentTransactions:
     description: An array of Investment accounts.
     type: InvestmentTransaction[]
     minItems: 1
 resourceTypes:
-/assetallocation:
+/AssetAllocation:
   displayName: Asset Allocations
-  description: Collection of Asset Allocations
+  description: The Asset Allocations for a specified entity.
   get:
-    description: Retrieve all asset allocations
-    queryParameters: 
+    description:
+      Retrieve all asset allocations for the specified entity.
+      Allocations are returned in client base currency, USD,
+      GBP, EUR and percentage weightings.
+    queryParameters:
+      LEVEL:
+        displayName: LEVEL
+        type: string
+        description: Defines which level the request is being made at.
+        example: GROUP
+        required: true
+        enum:
+          - ACCOUNT
+          - GROUP
+          - CUSTOMER
+      filter:
+        displayName: filter
+        type: string
+        description: The ID of the entity you are looking for.
+        example: 12345
+        required: true
+    responses:
+      200:
+        body:
+          application/json:
+            type: AssetAllocations
+            example: |
+              [
+                {
+                    "extractDate": "2019-02-25T00:00:00.0000000+00:00",
+                    "EntityType": "GROUP",
+                    "EntityId": "12345",
+                    "EntityName": "Paul Smith",
+                    "classification1": "Fixed Income",
+                    "baseCurrency": "GBP",
+                    "marketValueBase": 880620.027147,
+                    "marketValueGBP": 880620.027147,
+                    "marketValueEUR": 1026243.757937,
+                    "marketValueUSD": 1166733.473967,
+                    "weighting": 12.012057159573683,
+                    "order": 1
+                },
+                {
+                    "extractDate": "2019-02-25T00:00:00.0000000+00:00",
+                    "EntityType": "GROUP",
+                    "EntityId": "12345",
+                    "EntityName": "Paul Smith",
+                    "classification1": "Cash",
+                    "baseCurrency": "GBP",
+                    "marketValueBase": 586366.738077,
+                    "marketValueGBP": 586366.738077,
+                    "marketValueEUR": 683331.273719,
+                    "marketValueUSD": 776877.291278,
+                    "weighting": 7.9983086429147754,
+                    "order": 3
+                }
+              ]
+  /Classifications:
+    displayName: Classifications
+    description: Returns all possible values for the classification
+    get:
+      description: Retrieve all categories in a classification
+      queryParameters:
+        ClassificationType:
+          diplayName: ClassificationType
+          type: string
+          description: The name of classification.
+          example: Asset Type
+          required: true
+      responses:
+        200:
+          body:
+            application/json:
+              type: Classifications
+              example: |
+                [
+                  {
+                      "ClassificationType": "Asset Type",
+                      "ClassificationLabel": "Cash",
+                      "ClassificationValue": "ABC_CASH"
+                  },
+                  {
+                      "ClassificationType": "Asset Type",
+                      "ClassificationLabel": "Commodities",
+                      "ClassificationValue": "ABC_COMMOD"
+                  }
+                ]
+/AUM:
+  displayName: Assets Under Management
+  description: The total value assets under a specified entity.
+  get:
+    description:
+      Retrieves the total assets under management for the specified entity.
+      Values are returned in client base currency, USD,
+      GBP, EUR and perctentage weightings.
+    queryParameters:
       LEVEL:
         displayName: LEVEL
         type: string
         description: Defines which level the request is being made at
         example: GROUP
         required: true
-      filterId:
-        displayName: filterId
-        type: integer
-        description: Optional pass the ID you are looking for
+        enum:
+          - ACCOUNT
+          - GROUP
+          - CUSTOMER
+      filter:
+        displayName: filter
+        type: string
+        description: The ID of the entity you are looking for.
         example: 12345
-        required: false
+        required: true
     responses:
       200:
         body:
           application/json:
-            type: AssetAllocations
-  /classifications:
-    displayName: Classifications
-    description: Collection of Classifications
-    get:
-        description: Retrieve all classifications
-        queryParameters: 
-          ClassificationType:
-            displayName: ClassificationType
-            type: string
-            description: What type of classification your are trying to get
-            example: Geography
-            required: true
-        responses:
-          200:
-            body:
-              application/json:
-                type: Classifications
-/cash:
+            type: AssetsUnderManagement
+            example: |
+              [
+                {
+                    "ExtractDate": "2019-02-25T00:00:00.0000000+00:00",
+                    "EntityType": "GROUP",
+                    "EntityId": "12345",
+                    "EntityName": "The Paul Smith Trust",
+                    "BaseCurrency": "GBP",
+                    "BookCostBase": 6638633.98,
+                    "BookCostGBP": 6638633.98,
+                    "BookCostEUR": 7736431.6881027,
+                    "BookCostUSD": 8795526.160102,
+                    "MarketValueBase": 224118102.96866599,
+                    "MarketValueGBP": 224118102.96866599,
+                    "MarketValueEUR": 261179393.06607944,
+                    "MarketValueUSD": 296934074.62318563
+                }
+              ]
+/Cash:
   displayName: Cash
-  description: All calls relating to cash accounts  
-  /accounts:
-    displayName: Cash Accounts
-    description: Collection of all cash accounts
+  description: All calls relating to cash accounts
+  /Accounts:
+    displayName: Cash Accounts by name
+    description: Search for cash accounts by name
     get:
-      description: Retrieve all cash accounts
-      queryParameters: 
-        LEVEL:
-          displayName: LEVEL
+      queryParameters:
+        searchTerm:
+          displayName: searchTerm
           type: string
-          description: Defines which level the request is being made at
-          example: GROUP
+          description: Search the account name for this text.
+          example: Paul Smith
           required: true
-        filterId:
-          displayName: filterId
-          type: integer
-          description: Optional ID you are looking for
-          example: 12345
-          required: false
+      description: Search for cash accounts by name
       responses:
         200:
           body:
             application/json:
               type: CashAccounts
-  /accounts/{id}:
+              example: |
+                [
+                  {
+                      "accountId": 185046,
+                      "accountNumber": "1185046",
+                      "accountName": Paul Smith - ADV CAP",
+                      "accountCurrency": "EUR",
+                      "accountStatus": "ACTIVE"
+                  },
+                  {
+                      "accountId": 193461,
+                      "accountNumber": "1193461",
+                      "accountName": "Paul Smith - ADV INC",
+                      "accountCurrency": "USD",
+                      "accountStatus": "ACTIVE"
+                  }
+                ]
+
+  /Accounts/{id}:
     displayName: Cash Accounts ID
-    description: Single cash accounts by ID
-    uriParameters: 
+    description: Search for a single cash account by its Id.
+    uriParameters:
       id:
         displayName: id
-        type: number
+        type: integer
         description: The cash account ID you are trying to retrieve
         example: 12345
         required: true
@@ -850,35 +1079,50 @@ resourceTypes:
         200:
           body:
             application/json:
-              type: CashAccount
-  /transactions:
+              type: CashAccounts
+              example: |
+                [
+                  {
+                      "accountId": 12345,
+                      "accountNumber": "1012345",
+                      "accountName": "Paul Smith GBP Income account",
+                      "accountCurrency": "GBP",
+                      "accountStatus": "ACTIVE"
+                  }
+              ]
+  /Transactions:
     displayName: Cash Acounts Transactions
-    description: Collection of all transactions, defaults to 30 days worth of transactions without from and to parameters populated.
+    description: Collection of all cash transactions linked to an entity.
+                 Defaults to 30 days worth of transactions without from and to parameters populated.
     get:
       description: Retrieve all cash transactions
-      queryParameters: 
+      queryParameters:
         LEVEL:
           displayName: LEVEL
           type: string
           description: Defines which level the request is being made at
           example: GROUP
           required: true
-        filterId:
-          displayName: filterId
+          enum:
+            - ACCOUNT
+            - GROUP
+            - CUSTOMER
+        filter:
+          displayName: filter
           type: integer
-          description: Optional pass the ID you are looking for
+          description: The ID of the entity you are looking for
           example: 12345
-          required: false
+          required: true
         from:
           displayName: from
           type: datetime
-          description: Optionally pass the date from
+          description: Optionally pass the start date
           example: 2018-09-01
           required: false
         to:
           displayName: to
           type: datetime
-          description: Optionally pass the date to
+          description: Optionally pass the end date
           example: 2018-09-30
           required: false
       responses:
@@ -886,123 +1130,305 @@ resourceTypes:
           body:
             application/json:
               type: CashTransactions
-/holdings:
-  displayName: Holdings
-  description: Collection of all holdings for a client.
+              example: |
+                [
+                  {
+                      "entityType": "CUSTOMER",
+                      "entityId": "123456",
+                      "entityName": "Smith, Paul",
+                      "investmentAccountNumber": "1012345",
+                      "investmentAccountName": "Paul Smith Trust",
+                      "cashAccountName": "Paul Smith GBP INC",
+                      "cashAccountNumber": "104568",
+                      "cashAccountType": "Income",
+                      "transactionId": 5472829,
+                      "valueDate": "2018-12-20T00:00:00.0000000+00:00",
+                      "postedDate": "2018-12-20T10:39:52.0000000+00:00",
+                      "transactionType": "Corporate Action Income",
+                      "creditDebit": "CREDIT",
+                      "transactionCurrency": "GBP",
+                      "transactionAmount": 443.44,
+                      "cashTransactionStatus": "Posted",
+                      "transactionDescription": "Cash dividend - LEGG MASON GLOBAL FUNDS WESTN ASSET MACRO OPPS BD HGD PREM INC",
+                      "quantity": 0,
+                      "settledQuantity": 0,
+                      "expectedSettlementDate": "0001-01-01T00:00:00.0000000+00:00",
+                      "investmentTransactionStatus": null,
+                      "transDate": "0001-01-01T00:00:00.0000000+00:00"
+                  },
+                  {
+                      "entityType": "CUSTOMER",
+                      "entityId": "123456",
+                      "entityName": "Smith, Paul",
+                      "investmentAccountNumber": "1012345",
+                      "investmentAccountName": "Paul Smith Trust",
+                      "cashAccountName": "Paul Smith GBP CAP",
+                      "cashAccountNumber": "1015019",
+                      "cashAccountType": "Capital",
+                      "transactionId": 5591916,
+                      "valueDate": "2019-02-05T00:00:00.0000000+00:00",
+                      "postedDate": "2019-02-05T09:38:56.0000000+00:00",
+                      "transactionType": "Trade",
+                      "creditDebit": "CREDIT",
+                      "transactionCurrency": "GBP",
+                      "transactionAmount": 110812.27,
+                      "cashTransactionStatus": "Posted",
+                      "transactionDescription": "Sell 943.324 INVESCO MANAGEMENT SA ZODIAC US SENIOR LOAN GH GBP",
+                      "quantity": 943.324,
+                      "settledQuantity": 943.324,
+                      "expectedSettlementDate": "2019-02-05T00:00:00.0000000+00:00",
+                      "investmentTransactionStatus": "Settled",
+                      "transDate": "2019-01-29T00:00:00.0000000+00:00"
+                  }
+                ]
+/Client:
+  displayName: Client
+  description: The details of a client
   get:
-    description: Retrieve all holdings.
+    description: Retrieve the properties of a client
+    queryParameters:
+      searchTerm:
+       displayName: searchTerm
+       type: string
+       description: Text to search for in the client's name
+       example: Smith
+       required: true
+    responses:
+      200:
+        body:
+          application/json:
+            type: Clients
+            example: |
+                [
+                  {
+                      "customerId": 12345,
+                      "customerName": "Smith, Paul",
+                      "customerRef": "ABC12345",
+                      "customerDomicile": "GB",
+                      "customerBaseCurrency": "GBP",
+                      "customerStatus": "PROVEN"
+                  },
+                  {
+                      "customerId": 95106,
+                      "customerName": "Smith, John",
+                      "customerRef": "ABC1000",
+                      "customerDomicile": "GB",
+                      "customerBaseCurrency": "GBP",
+                      "customerStatus": "PROVEN"
+                  }
+                ]
+/Holdings:
+  displayName: Holdings
+  description: The  holdings for a specified entity. This shows a traded market value as at close of business yesterday.
+  get:
+    description: Retrieve all holdings for a specified entity.
+                 This shows a traded dirty market value as at close of business yesterday.
     queryParameters:
       LEVEL:
         displayName: LEVEL
         type: string
-        description: Level at which call is being made e.g. GROUP, CLIENT or WRAPPER
+        description: Defines which level the request is being made at
         example: GROUP
         required: true
-      filterId:
-        displayName: filterId
-        type: integer
-        description: Optional filterId or Unique Reference
+        enum:
+          - ACCOUNT
+          - GROUP
+          - CUSTOMER
+      filter:
+        displayName: filter
+        type: string
+        description: The Id of the entity being search for.
         example: 12345
-        required: false
+        required: true
     responses:
       200:
         body:
           application/json:
             type: Holdings
-/performance:
-  displayName: Performance
-  description: All calls relation to performance
-  get:
-    description: Retrieve all performance for a specific entity.
-    queryParameters: 
-      LEVEL:
-        displayName: LEVEL
-        type: string
-        description: Level at which call is being made e.g. GROUP, CLIENT or WRAPPER
-        example: GROUP
-        required: true
-      filterId:
-        displayName: filterId
-        type: integer
-        description: Optional filterId or Unique Reference
-        example: 12345
-        required: false
-    responses: 
-      200:
-        body: 
-          application/json:
-            type: Performance
-/investment:
+            example: |
+              [
+                {
+                "extractDate": "2019-02-26T00:00:00.0000000+00:00",
+                "EntityType": "GROUP",
+                "EntityId": "12345",
+                "EntityName": "Paul Smith",
+                "baseCurrency": "GBP",
+                "accountNumber": "100100",
+                "accountName": "Paul Smith Trust",
+                "accountType": "Trust",
+                "securityId": 42185,
+                "securityName": "ISHARES III PLC UK GILTS 0-5YR UCITS ETF GBP DIST",
+                "securityCCY": "GBP",
+                "ISIN": "IE00B4WXJK79",
+                "SEDOL": "B4WXJK7",
+                "quantity": 3074,
+                "bookCostBase": 409492.57,
+                "bookCostGBP": 409492.57,
+                "bookCostEUR": 542536.705993,
+                "bookCostUSD": 477208.30883805,
+                "bookCostSec": 409492.57,
+                "marketPriceSec": 132.575,
+                "marketValueSec": 407535.55,
+                "marketValueGBP": 407535.55,
+                "marketValueUSD": 539943.850195,
+                "marketValueEUR": 474927.66622575,
+                "marketValueBase": 407535.55,
+                "accruedInterestGBP": 0,
+                "accruedInterestUSD": 0,
+                "accruedInterestEUR": 0,
+                "accruedInterestBase": 0,
+                "securityType": "OEIC 0dp",
+                "instrumentType": "Fund",
+                "classification1": "Fixed Income",
+                "classification2": "United Kingdom",
+                "classification3": null,
+                "custodyAccountNumber": "98765432",
+                "custodyAccountName": "MIS CUST ABC BNY",
+                "yield": 0.88,
+                "estimatedAnnualIncome": 3603.021798,
+                "fxRate": 1
+                },
+                {
+                    "extractDate": "2019-02-26T00:00:00.0000000+00:00",
+                    "EntityType": "GROUP",
+                    "EntityId": "12345",
+                    "EntityName": "Paul Smith",
+                    "baseCurrency": "GBP",
+                    "accountNumber": "1002746",
+                    "accountName": "Paul Smith Trust",
+                    "accountType": "Trust",
+                    "securityId": 3044,
+                    "securityName": "SMITH CAPITAL FUND II LP",
+                    "securityCCY": "GBP",
+                    "ISIN": "PAS000007199",
+                    "SEDOL": "IMW0071",
+                    "quantity": 90000,
+                    "bookCostBase": 9246.45,
+                    "bookCostGBP": 9246.45,
+                    "bookCostEUR": 12250.621605,
+                    "bookCostUSD": 10775.489204250001,
+                    "bookCostSec": 9246.45,
+                    "marketPriceSec": 0.468276,
+                    "marketValueSec": 42144.84,
+                    "marketValueGBP": 42144.84,
+                    "marketValueUSD": 55837.698516,
+                    "marketValueEUR": 49114.121466599994,
+                    "marketValueBase": 42144.84,
+                    "accruedInterestGBP": 0,
+                    "accruedInterestUSD": 0,
+                    "accruedInterestEUR": 0,
+                    "accruedInterestBase": 0,
+                    "securityType": "Equity",
+                    "instrumentType": "Equity",
+                    "classification1": "Real Estate",
+                    "classification2": "United Kingdom",
+                    "classification3": null,
+                    "custodyAccountNumber": "112233",
+                    "custodyAccountName": "ABC Record Keeping Only",
+                    "yield": 0,
+                    "estimatedAnnualIncome": 0,
+                    "fxRate": 1
+                }
+              ]
+/Investment:
   displayName: Investment
   description: All calls relating to investment accounts
-  /account:
+  /Account:
     displayName: Investment Accounts
-    description: Collection of all investment accounts
+    description: Search for investment accounts by name
     get:
-      description: Retrieve all investment accounts
-      queryParameters: 
-        LEVEL:
-          displayName: LEVEL
+      description: Search for investment accounts by name
+      queryParameters:
+        searchTerm:
+          displayName: searchTerm
           type: string
-          description: Defines which level the request is being made at
-          example: GROUP
+          description: The text to look for in the account name.
+          example: "Smith"
           required: true
-        filterId:
-          displayName: filterId
-          type: integer
-          description: Optional ID you are looking for
-          example: 12345
-          required: false
       responses:
         200:
           body:
             application/json:
               type: InvestmentAccounts
-  /accounts/{id}:
-    displayName: Investment Accounts ID
-    description: Single investment accounts by ID
-    uriParameters: 
+              example: |
+                [
+                 {
+                     "accountId": 111234,
+                     "accountNumber": "111234",
+                     "accountName": "Paul Smith ISA",
+                     "accountType": "ISA",
+                     "accountStatus": "ACTIVE"
+                  },
+                  {
+                     "accountId": 12345,
+                     "accountNumber": "1012345",
+                     "accountName": "Paul Smith",
+                     "accountType": "Individual",
+                     "accountStatus": "ACTIVE"
+                  }
+                ]
+
+  /Accounts/{id}:
+    displayName: Investment Account by ID
+    description: Search for a single investment account by its Id.
+    uriParameters:
       id:
         displayName: id
-        type: number
-        description: The invtesment account ID you are trying to retrieve
+        type: integer
+        description: The invtesment account Id you are trying to retrieve
         example: 12345
         required: true
     get:
-      description: Retrieve a single investment account
+      description: Search for a single investment account by its Id.
       responses:
         200:
           body:
             application/json:
-              type: InvestmentAccount
-  /transaction:
+              type: InvestmentAccounts
+              example: |
+                [
+                  {
+                      "accountId": 12345,
+                      "accountNumber": "1012345",
+                      "accountName": "Paul Smith",
+                      "accountType": "Individual",
+                      "accountStatus": "ACTIVE"
+                  }
+              ]
+  /Transaction:
     displayName: Investment Transactions
-    description: Collection of all transactions, defaults to 30 days without from and to parameters populated
+    description: Returns all investment transactions relating to an Entity.
+                 By default the last 30 days of transactions will be returned
+                 unless a to and from date are specified.
     get:
       description: Retrieve all investment transactions
-      queryParameters: 
+      queryParameters:
         LEVEL:
           displayName: LEVEL
           type: string
           description: Defines which level the request is being made at
           example: GROUP
           required: true
-        filterId:
-          displayName: filterId
-          type: integer
-          description: Optionally pass the ID you are looking for
+          enum:
+            - ACCOUNT
+            - GROUP
+            - CUSTOMER
+        filter:
+          displayName: filter
+          type: string
+          description: The ID of the entity you are looking for
           example: 12345
-          required: false
+          required: true
         from:
           displayName: from
           type: datetime
-          description: Optionally pass the date from
+          description: Optionally set the start date.
           example: 2018-09-01
           required: false
         to:
           displayName: to
           type: datetime
-          description: Optionally pass the date to
+          description: Optionally set the end date.
           example: 2018-09-30
           required: false
       responses:
@@ -1010,3 +1436,140 @@ resourceTypes:
           body:
             application/json:
               type: InvestmentTransactions
+              example: |
+                [
+                  {
+                      "EntityType": "GROUP",
+                      "EntityId": "12345",
+                      "EntityName": "Smith, Paul",
+                      "investmentTransactionId": 1889752,
+                      "investmentAccountNumber": "111000",
+                      "investmentAccountName": "Paul Smith",
+                      "securityId": 194283,
+                      "securityName": "SERAPHIM SPACE LP",
+                      "ISIN": "ZZ0000001058",
+                      "SEDOL": "Z001058",
+                      "transactionType": "BC Increase",
+                      "transactionDate": "2019-01-09T00:00:00.0000000+00:00",
+                      "settlementDate": "2019-01-09T00:00:00.0000000+00:00",
+                      "quantity": 0,
+                      "securityCurrency": "GBP",
+                      "priceSecCurrency": 0,
+                      "settlementCurrency": "GBP",
+                      "settlementAmount": 0,
+                      "grossAmountInSettlementCurrency": 0,
+                      "tradeCurrency": "GBP",
+                      "settlementAmountInTradeCurrency": 0,
+                      "grossAmountInTradeCurrency": 0,
+                      "baseCurrency": "GBP",
+                      "settlementAmountInBaseCurrency": 0,
+                      "grossAmountInBaseCurrency": 0,
+                      "custodyAccountNumber": "MIS Nominees ABCOFFSHORE",
+                      "tradeStatus": "Settled"
+                  },
+                  {
+                      "EntityType": "GROUP",
+                      "EntityId": "12345",
+                      "EntityName": "Paul Smith",
+                      "investmentTransactionId": 1910645,
+                      "investmentAccountNumber": "1103203",
+                      "investmentAccountName": "Paul Smith",
+                      "securityId": 113894,
+                      "securityName": "INVESCO MANAGEMENT SA SEN.LOAN FD-GH GBP",
+                      "ISIN": "LU0769027045",
+                      "SEDOL": "4JDP4P4",
+                      "transactionType": "Sell",
+                      "transactionDate": "2019-01-29T00:00:00.0000000+00:00",
+                      "settlementDate": "2019-02-05T00:00:00.0000000+00:00",
+                      "quantity": -174.856,
+                      "securityCurrency": "GBP",
+                      "priceSecCurrency": 130.02,
+                      "settlementCurrency": "GBP",
+                      "settlementAmount": 22734.78,
+                      "grossAmountInSettlementCurrency": 22734.78,
+                      "tradeCurrency": "GBP",
+                      "settlementAmountInTradeCurrency": 22734.78,
+                      "grossAmountInTradeCurrency": 22734.78,
+                      "baseCurrency": "GBP",
+                      "settlementAmountInBaseCurrency": 22734.78,
+                      "grossAmountInBaseCurrency": 22734.78,
+                      "custodyAccountNumber": "MIS Nominees ABCOFFSHORE",
+                      "tradeStatus": "Settled"
+                  }
+                ]
+/Performance:
+              displayName: Performance
+              description: All calls relation to performance
+              get:
+                description: Retrieve all performance for a specific entity.
+                queryParameters:
+                  LEVEL:
+                    displayName: LEVEL
+                    type: string
+                    description: Defines which level the request is being made at
+                    example: GROUP
+                    required: true
+                    enum:
+                    - ACCOUNT
+                      - GROUP
+                      - CUSTOMER
+                  filterId:
+                    displayName: filterId
+                    type: integer
+                    description: The Id of the entity to search for
+                    example: 12345
+                    required: true
+                responses:
+                  200:
+                    body:
+                      application/json:
+                        type: PerformanceTable
+                        example: |
+                          [
+                              {
+                                  "BrandCD": "ABC",
+                                  "EntityType": "ACCOUNT",
+                                  "EntityID": "12345",
+                                  "EntityName": "Paul Smith Trust",
+                                  "YTD": 6.56353076,
+                                  "ThreeMonths": -6.6052,
+                                  "SixMonths": -5.4471,
+                                  "OneYear": -4.788,
+                                  "ThreeYears": 2.4024,
+                                  "FiveYears": 22.6431,
+                                  "SinceInception": 501.40735544,
+                                  "AnnualisedReturn": 25.44127619,
+                                  "InceptionDate": "2011-02-01T00:00:00.0000000+00:00",
+                                  "Year1": 4.5544,
+                                  "Year2": 2.868,
+                                  "Year3": 8.3377,
+                                  "Year4": 10.5546,
+                                  "Year5": 6.3097,
+                                  "YTDQE": -4.788,
+                                  "SinceInceptionQE": 39.4281,
+                                  "AnnualisedReturnQE": 4.288704119964
+                              },
+                              {
+                                  "BrandCD": "ABC",
+                                  "EntityType": "GROUP",
+                                  "EntityID": "123456",
+                                  "EntityName": "Paul Smith",
+                                  "YTD": 6.56353076,
+                                  "ThreeMonths": -6.6052,
+                                  "SixMonths": -5.4471,
+                                  "OneYear": -4.788,
+                                  "ThreeYears": 2.4024,
+                                  "FiveYears": 22.6431,
+                                  "SinceInception": 501.40735544,
+                                  "AnnualisedReturn": 25.44127619,
+                                  "InceptionDate": "2011-02-01T00:00:00.0000000+00:00",
+                                  "Year1": 4.5544,
+                                  "Year2": 2.868,
+                                  "Year3": 8.3377,
+                                  "Year4": 10.5546,
+                                  "Year5": 6.3097,
+                                  "YTDQE": -4.788,
+                                  "SinceInceptionQE": 39.4281,
+                                  "AnnualisedReturnQE": 4.288704119964
+                              }
+                          ]
