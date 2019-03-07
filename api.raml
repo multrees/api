@@ -98,7 +98,7 @@ types:
       properties:
         ClassificationType:
           type: string
-          description: The type of classifcation
+          description: The type of classification
           required: true
         ClassificationLabel:
           type: string
@@ -118,8 +118,8 @@ types:
         minItems: 1
   AUM:
       displayName: Assets Under Management
-      description: returns all the total marlet value and bookcost
-                   in Base curremncy, GBP, EUR and USD.
+      description: returns all the total market value and bookcost
+                   in Base currency, GBP, EUR and USD.
       type: object
       properties:
         ExtractDate:
@@ -290,7 +290,7 @@ types:
         required: true
       transactionAmount:
         type: number
-        description: Value of the transaction in trasnaction currency.
+        description: Value of the transaction in transaction currency.
         required: true
       cashTransactionStatus:
         type: string
@@ -313,7 +313,7 @@ types:
         description: The expected settlement date of the related investment transaction
         required: true
       investmentTransactionStatus:
-        type: string
+        type: nil | string
         description: Status of the related investment transaction
         required: true
       transDate:
@@ -536,7 +536,7 @@ types:
         required: true
       yield:
         type: number
-        description: Yeild of the security
+        description: Yield of the security
         required: true
       estimatedAnnualIncome:
         type: number
@@ -586,6 +586,36 @@ types:
       yield: 2.57
       estimatedAnnualIncome: 5469.84257
       fxRate: 1
+  GroupDetail:
+    displayName: Group Details
+    description: Details of a group
+    type: object
+    properties:
+      groupId:
+        description: The group Id
+        type: integer
+        required: true
+      groupName:
+        description: The name of the group
+        type: string
+        required: true
+      groupDescription:
+        description: The group's description
+        type: string
+        required: true
+      groupType:
+        description: The group type (e.g. client or portfolio)
+        type: string
+        required: true
+    example:
+      groupId: 12345,
+      groupName: Paul Smith Investments
+      description: For client reporting
+      groupType: Portfolio
+  GroupDetails:
+        description: : An array of groups
+        type: GroupDetail[]
+        minItems: 1
   Holdings:
     description: An array of holdings.
     type: Holding[]
@@ -669,11 +699,11 @@ types:
         required: true
       YTDQE:
         type: number
-        description: Year to Date peformance to end of last quarter
+        description: Year to Date performance to end of last quarter
         required: true
       SinceInceptionQE:
         type: number
-        description: Since Inception peformance to end of last quarter
+        description: Since Inception performance to end of last quarter
         required: true
       AnnualisedReturnQE:
         type: number
@@ -823,7 +853,7 @@ types:
         required: true
       tradeCurrency:
         type: string
-        description: Currency of trasnaction
+        description: Currency of transaction
         required: true
       settlementAmountInTradeCurrency:
         type: number
@@ -984,7 +1014,7 @@ resourceTypes:
     description:
       Retrieves the total assets under management for the specified entity.
       Values are returned in client base currency, USD,
-      GBP, EUR and perctentage weightings.
+      GBP, EUR and percentage weightings.
     queryParameters:
       LEVEL:
         displayName: LEVEL
@@ -1089,11 +1119,12 @@ resourceTypes:
                       "accountCurrency": "GBP",
                       "accountStatus": "ACTIVE"
                   }
-              ]
+                ]
   /Transactions:
     displayName: Cash Acounts Transactions
     description: Collection of all cash transactions linked to an entity.
-                 Defaults to 30 days worth of transactions without from and to parameters populated.
+                 Defaults to 30 days worth of transactions without from and
+                 to parameters populated. To and From dates are inclusive.
     get:
       description: Retrieve all cash transactions
       queryParameters:
@@ -1117,13 +1148,13 @@ resourceTypes:
           displayName: from
           type: datetime
           description: Optionally pass the start date
-          example: 2018-09-01
+          example: 2018-09-01T00:00:00-00:00
           required: false
         to:
           displayName: to
           type: datetime
           description: Optionally pass the end date
-          example: 2018-09-30
+          example: 2018-09-30T00:00:00-00:00
           required: false
       responses:
         200:
@@ -1217,6 +1248,40 @@ resourceTypes:
                       "customerStatus": "PROVEN"
                   }
                 ]
+/Groups:
+  displayName: Groups
+  description: All calls relating to reporting groups
+  /GroupDetails:
+    displayName: Group Details
+    description: Get the details of groups based on a comma separated list of group ids
+    get:
+      queryParameters:
+        groupList:
+          displayName: groupList
+          type: string
+          description: Comma separated list of group ids.
+          example: 1234,98765
+          required: true
+      responses:
+        200:
+          body:
+            application/json:
+              type: GroupDetails
+              example: |
+                [
+                  {
+                      "groupId": 126966,
+                      "groupName": "John Smith ISA",
+                      "groupDescription": "Pack ID 7937 - Portfolio Pack",
+                      "groupType": "CLIENT"
+                  },
+                  {
+                      "groupId": 130748,
+                      "groupName": "Smith Trust - Satellite",
+                      "groupDescription": "For consolidated portfolio pack",
+                      "groupType": "PORTFOLIO"
+                  }
+              ]
 /Holdings:
   displayName: Holdings
   description: The  holdings for a specified entity. This shows a traded market value as at close of business yesterday.
@@ -1394,12 +1459,13 @@ resourceTypes:
                       "accountType": "Individual",
                       "accountStatus": "ACTIVE"
                   }
-              ]
+                ]
   /Transaction:
     displayName: Investment Transactions
     description: Returns all investment transactions relating to an Entity.
                  By default the last 30 days of transactions will be returned
-                 unless a to and from date are specified.
+                 unless a to and from date are specified.  To and From dates
+                 are inclusive.
     get:
       description: Retrieve all investment transactions
       queryParameters:
